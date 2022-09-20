@@ -3,6 +3,8 @@
   "package": "srki2k.tweakedexcavation.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinMineralMix",
+    "MixinMineralWorldInfo",
     "MixinTileEntityExcavator"
   ],
   "client": [],
