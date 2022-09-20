@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "tweakedexcavation",
+  "name": "TweakedExcavation",
+  "description": "Adding more options to IE's excavators.",
   "version": "${version}",
   "mcversion": "1.12.2",
   "url": "",
   "updateUrl": "",
-  "authorList": ["CleanroomMC"],
-  "credits": "Authors of this project",
+  "authorList": ["Srki_2K"],
+  "credits": "BluSunrize for ImmersiveEngineering",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
