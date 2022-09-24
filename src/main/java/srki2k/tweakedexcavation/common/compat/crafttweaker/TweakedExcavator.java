@@ -13,22 +13,14 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public class TweakedExcavator {
 
     @ZenMethod
-    public static void addMineral(String name, int mineralWeight, double failChance, String[] ores, double[] chances, @Optional int[] dimension, @Optional boolean blacklist , int powerTier) {
-        float[] fChances = new float[chances.length];
-        for (int i = 0; i < chances.length; i++) {
-            fChances[i] = (float) chances[i];
-        }
+    public static void addMineral(String name, int mineralWeight, float failChance, String[] ores, float[] chances, int powerTier, int[] dimBlacklist, int[] dimWhitelist) {
 
+        ExcavatorHandler.MineralMix mineral = TweakedExcavatorHandler.addTweakedMineral(name, mineralWeight, failChance, ores, chances, powerTier);
 
-        ExcavatorHandler.MineralMix mineral = TweakedExcavatorHandler.addTweakedMineral(name, mineralWeight, (float) failChance, ores, fChances, powerTier);
-        if (dimension != null)
-            if (blacklist) {
-                mineral.dimensionBlacklist = dimension;
-            } else {
-                mineral.dimensionWhitelist = dimension;
-            }
+        mineral.dimensionBlacklist = dimBlacklist;
+        mineral.dimensionWhitelist = dimWhitelist;
 
-        CraftTweakerAPI.logInfo("Adding MineralMix: "+name+" with weight "+mineralWeight);
+        CraftTweakerAPI.logInfo("Adding MineralMix: " + name + " with weight " + mineralWeight);
     }
 
 }
