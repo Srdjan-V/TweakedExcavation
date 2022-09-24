@@ -1,7 +1,7 @@
 [
 {
   "modid": "tweakedexcavation",
-  "name": "TweakedExcavation",
+  "name": "Tweaked Excavation",
   "description": "Adding more options to IE's excavators.",
   "version": "${version}",
   "mcversion": "1.12.2",

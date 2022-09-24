@@ -118,7 +118,9 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
 
     implementation 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.679'
-    implementation 'blusunrize:ImmersiveEngineering:0.12-92-559'
+    runtimeOnly fg.deobf('curse.maven:ImmersivePetroleum-268250:3382321')
+    implementation fg.deobf('curse.maven:ImmersiveEngineering-231951:2974106')
+    //implementation 'blusunrize:ImmersiveEngineering:0.12-92-559'
 
     //AdvancedRocketry
     implementation fg.deobf('curse.maven:AdvancedRocketry-236542:3801020')

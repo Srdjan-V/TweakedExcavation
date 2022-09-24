@@ -7,13 +7,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import srki2k.tweakedexcavation.util.TweakedExcavationErrorLogging;
 
 
 @Mod(modid = TweakedExcavation.MODID,
         version = TweakedExcavation.VERSION,
         name = "Tweaked Excavation",
-        dependencies = "required-after:immersivepetroleum;" +
-                "required-after:crafttweaker;" +
+        dependencies = "required-after:crafttweaker;" +
                 "required-after:tweakedlib@[@TWEAKEDLIB@,)")
 public class TweakedExcavation {
 

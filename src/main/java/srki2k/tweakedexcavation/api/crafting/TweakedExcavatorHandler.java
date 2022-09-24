@@ -47,9 +47,11 @@ public class TweakedExcavatorHandler {
      */
     public static ExcavatorHandler.MineralMix addTweakedMineral(String name, int mineralWeight, float failChance, String[] ores, float[] chances, int powerTier) {
         ExcavatorHandler.MineralMix mix = new ExcavatorHandler.MineralMix(name, failChance, ores, chances);
-
-        ((IMineralMix) mix).setPowerTier(powerTier);
         mineralList.put(mix, mineralWeight);
+
+        IMineralMix iMix = (IMineralMix) mix;
+        iMix.setPowerTier(powerTier);
+
         return mix;
     }
 }
