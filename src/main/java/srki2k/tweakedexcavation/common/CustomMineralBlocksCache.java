@@ -9,6 +9,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import java.util.HashMap;
 
 public class CustomMineralBlocksCache {
+    // TODO: 25/09/2022 Im not sure if cashing is needed, i will need to test it
     private static final HashMap<String, ItemStack> blocksCache = new HashMap<>();
 
     public static ItemStack getBlocks(String blockId) {
@@ -29,13 +30,15 @@ public class CustomMineralBlocksCache {
                 }
             }
 
-            customStack = searchBlock(strings);
-            if (customStack != ItemStack.EMPTY) {
-                blocksCache.put(blockId, customStack);
-                return customStack;
+            if (strings.length == 2 || strings.length == 3){
+                customStack = searchBlock(strings);
+                if (customStack != ItemStack.EMPTY) {
+                    blocksCache.put(blockId, customStack);
+                    return customStack;
+                }
             }
 
-            return customStack;
+            return ItemStack.EMPTY;
         }
 
         customStack = blocksCache.get(blockId);
@@ -70,7 +73,7 @@ public class CustomMineralBlocksCache {
         if (block != null) {
             customStack = new ItemStack(block);
 
-            if (strings.length > 2) {
+            if (strings.length == 3) {
                 customStack.setItemDamage(Integer.parseInt(strings[2]));
             }
 
@@ -78,4 +81,5 @@ public class CustomMineralBlocksCache {
         }
         return ItemStack.EMPTY;
     }
+
 }

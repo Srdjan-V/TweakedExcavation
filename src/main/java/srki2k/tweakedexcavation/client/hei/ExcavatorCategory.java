@@ -1,12 +1,16 @@
 package srki2k.tweakedexcavation.client.hei;
 
 import mezz.jei.api.gui.IDrawable;
+import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.util.Translator;
+import net.minecraft.item.ItemStack;
 import srki2k.tweakedexcavation.TweakedExcavation;
 import srki2k.tweakedlib.api.hei.BaseHEIUtil;
+
+import java.util.List;
 
 @SuppressWarnings("NullableProblems")
 public class ExcavatorCategory implements IRecipeCategory<ExcavatorWrapper> {
@@ -19,7 +23,7 @@ public class ExcavatorCategory implements IRecipeCategory<ExcavatorWrapper> {
 
     @Override
     public String getTitle() {
-        return Translator.translateToLocal("tile.immersiveengineering.metal_multiblock.metal_press.excavator.name");
+        return Translator.translateToLocal("tile.immersiveengineering.metal_multiblock.excavator.name");
     }
 
     @Override
@@ -34,6 +38,22 @@ public class ExcavatorCategory implements IRecipeCategory<ExcavatorWrapper> {
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, ExcavatorWrapper recipeWrapper, IIngredients ingredients) {
+        IGuiItemStackGroup iGuiItemStackGroup = recipeLayout.getItemStacks();
+        iGuiItemStackGroup.addTooltipCallback(recipeWrapper);
+        List<ItemStack> list = recipeWrapper.getM().oreOutput;
+
+        int x = 8, y = 31;
+
+        for (int i = 0; i < list.size(); i++, x += 21) {
+            if (x == 146) {
+                x = 9;
+                y = 53;
+            }
+
+            iGuiItemStackGroup.init(i, false, x, y);
+            iGuiItemStackGroup.set(i, list.get(i));
+
+        }
 
     }
 
