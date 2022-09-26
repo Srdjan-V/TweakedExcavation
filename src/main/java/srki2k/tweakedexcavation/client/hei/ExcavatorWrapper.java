@@ -9,10 +9,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import srki2k.tweakedexcavation.api.ihelpers.IMineralMix;
 import srki2k.tweakedlib.api.hei.BaseHEIUtil;
-import srki2k.tweakedlib.api.powertier.PowerTierHandler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemStack> {
@@ -23,9 +21,8 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     }
 
 
-    // TODO: 25/09/2022 This is Temporary
-    public ExcavatorHandler.MineralMix getM() {
-        return mineralMix;
+    public List<ItemStack> getMinerals() {
+        return mineralMix.oreOutput;
     }
 
     @Override
@@ -36,19 +33,23 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     @Override
     @SuppressWarnings("NullableProblems")
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
+        if (mouseX > 6 && mouseX < 120 && mouseY > 6 && mouseY < 18) {
+            List<String> list = new ArrayList<>();
+            list.add(BaseHEIUtil.formatString(mineralMix.name));
+
+            return list;
+        }
+
         if (mouseX > 124 && mouseX < 135 && mouseY > 8 && mouseY < 22) {
             List<String> list = new ArrayList<>();
-            list.add(String.valueOf(((IMineralMix) mineralMix).getPowerTier()));
-            list.add(BaseHEIUtil.numberFormat.format(PowerTierHandler.getPowerTier(((IMineralMix) mineralMix).getPowerTier()).getCapacity()));
-            list.add(BaseHEIUtil.numberFormat.format(PowerTierHandler.getPowerTier(((IMineralMix) mineralMix).getPowerTier()).getRft()));
+            BaseHEIUtil.powerTierListData(list, ((IMineralMix) mineralMix).getPowerTier());
 
             return list;
         }
 
         if (mouseX > 138 && mouseX < 151 && mouseY > 8 && mouseY < 22) {
             List<String> list = new ArrayList<>();
-            list.add("dimensionWhitelist" + Arrays.toString(mineralMix.dimensionWhitelist));
-            list.add("dimensionBlacklist" + Arrays.toString(mineralMix.dimensionBlacklist));
+            BaseHEIUtil.dimensionListData(list, mineralMix.dimensionWhitelist, mineralMix.dimensionBlacklist);
 
             return list;
         }
@@ -57,8 +58,13 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     }
 
     @Override
+    @SuppressWarnings("NullableProblems")
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        minecraft.fontRenderer.drawString(mineralMix.name, 8, 9 , 15658734);
+        if (mineralMix.name.length() > 17) {
+            minecraft.fontRenderer.drawString(mineralMix.name.substring(0, 17).concat("..."), 8, 9, 15658734);
+            return;
+        }
+        minecraft.fontRenderer.drawString(mineralMix.name, 8, 9, 15658734);
     }
 
     @Override

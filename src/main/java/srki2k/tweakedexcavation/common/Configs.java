@@ -27,14 +27,14 @@ public class Configs {
         }
 
         @Config.Name("Default Power Tiers")
-        public static DefaultPowerTiers defaultPowerTiers;
+        public static PowerTiers powerTiers;
 
-        public static class DefaultPowerTiers {
+        public static class PowerTiers {
             @Config.Comment({"This will set the power tier of the default IE Minerals, default=0"})
             @Config.Name("Default Minerals PowerTier")
             @Config.RangeInt(min = 0)
             @Config.RequiresMcRestart
-            public static int defaultPowerTier = 0;
+            public static int defaultPowerTier = 1;
         }
 
     }

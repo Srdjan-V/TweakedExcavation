@@ -13,6 +13,6 @@ public class MixinExcavatorHandler {
 
     @Inject(method = "addMineral", at = @At("RETURN"))
     private static void addMineral(String name, int mineralWeight, float failChance, String[] ores, float[] chances, CallbackInfoReturnable<ExcavatorHandler.MineralMix> cir) {
-        ((IMineralMix) cir.getReturnValue()).setPowerTier(Configs.TPConfig.DefaultPowerTiers.defaultPowerTier);
+        ((IMineralMix) cir.getReturnValue()).setPowerTier(Configs.TPConfig.PowerTiers.defaultPowerTier);
     }
 }

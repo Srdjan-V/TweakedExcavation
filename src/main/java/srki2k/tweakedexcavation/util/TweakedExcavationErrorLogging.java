@@ -13,14 +13,8 @@ import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralL
 import static srki2k.tweakedexcavation.common.Configs.TPConfig.Logging.*;
 
 public final class TweakedExcavationErrorLogging implements ICustomLogger {
-
-    private static ICustomLogger customLogger;
-
     public static void register() {
-        if (customLogger == null) {
-            customLogger = new TweakedExcavationErrorLogging();
-            ErrorLoggingLib.addCustomLogger(customLogger);
-        }
+        ErrorLoggingLib.addCustomLogger(new TweakedExcavationErrorLogging());
     }
 
     private TweakedExcavationErrorLogging() {

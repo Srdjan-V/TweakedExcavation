@@ -40,14 +40,13 @@ public class ExcavatorCategory implements IRecipeCategory<ExcavatorWrapper> {
     public void setRecipe(IRecipeLayout recipeLayout, ExcavatorWrapper recipeWrapper, IIngredients ingredients) {
         IGuiItemStackGroup iGuiItemStackGroup = recipeLayout.getItemStacks();
         iGuiItemStackGroup.addTooltipCallback(recipeWrapper);
-        List<ItemStack> list = recipeWrapper.getM().oreOutput;
+        List<ItemStack> list = recipeWrapper.getMinerals();
 
         int x = 8, y = 31;
-
         for (int i = 0; i < list.size(); i++, x += 21) {
-            if (x == 146) {
-                x = 9;
-                y = 53;
+            if (x == 155) {
+                x = 8;
+                y = 52;
             }
 
             iGuiItemStackGroup.init(i, false, x, y);
