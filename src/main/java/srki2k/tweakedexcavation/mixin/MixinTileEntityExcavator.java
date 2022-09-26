@@ -49,7 +49,7 @@ public abstract class MixinTileEntityExcavator extends TileEntityMultiblockMetal
     @Unique
     @Override
     public void initEnergyStorage() {
-        PowerTierHandler.initFluxStorage(energyStorage,
+        PowerTierHandler.initFluxStorageWithPowerTier(energyStorage,
                 TweakedExcavatorHandler.getPowerTier(this.getWorld(), this.getPos().getX() >> 4, this.getPos().getZ() >> 4));
     }
 
