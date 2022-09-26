@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import srki2k.tweakedexcavation.api.ihelpers.IMineralMix;
-import srki2k.tweakedexcavation.common.CustomMineralBlocksCache;
+import srki2k.tweakedexcavation.common.CustomMineralBlocks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +76,7 @@ public class MixinMineralMix implements IMineralMix {
                 preferredOre = IEApi.getPreferredOreStack(ore);
 
                 if (preferredOre == ItemStack.EMPTY) {
-                    preferredOre = CustomMineralBlocksCache.getBlocks(ore);
+                    preferredOre = CustomMineralBlocks.getBlocks(ore);
                 }
 
                 if (!preferredOre.isEmpty()) {
@@ -120,7 +120,6 @@ public class MixinMineralMix implements IMineralMix {
             }
             return false;
         }
-
 
         return true;
     }

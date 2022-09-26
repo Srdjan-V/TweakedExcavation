@@ -6,44 +6,29 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.HashMap;
-
-public class CustomMineralBlocksCache {
-    // TODO: 25/09/2022 Im not sure if cashing is needed, i will need to test it
-    private static final HashMap<String, ItemStack> blocksCache = new HashMap<>();
-
+public class CustomMineralBlocks {
     public static ItemStack getBlocks(String blockId) {
-        ItemStack customStack;
+        ItemStack customStack = ItemStack.EMPTY;
 
-        if (!blocksCache.containsKey(blockId)) {
-            String[] strings = blockId.split(":");
+        String[] strings = blockId.split(":");
 
-            if (strings.length == 1) {
-                return ItemStack.EMPTY;
-            }
-
-            if (strings.length == 2) {
-                customStack = searchOreDictionary(strings);
-                if (customStack != ItemStack.EMPTY) {
-                    blocksCache.put(blockId, customStack);
-                    return customStack;
-                }
-            }
-
-            if (strings.length == 2 || strings.length == 3){
-                customStack = searchBlock(strings);
-                if (customStack != ItemStack.EMPTY) {
-                    blocksCache.put(blockId, customStack);
-                    return customStack;
-                }
-            }
-
-            return ItemStack.EMPTY;
+        if (strings.length == 1) {
+            return customStack;
         }
 
-        customStack = blocksCache.get(blockId);
-        return customStack == null ? ItemStack.EMPTY : customStack.copy();
+        if (strings.length == 2) {
+            customStack = searchOreDictionary(strings);
+            if (customStack != ItemStack.EMPTY) {
+                return customStack;
+            }
+        }
 
+        if (strings.length == 2 || strings.length == 3) {
+            customStack = searchBlock(strings);
+            return customStack;
+        }
+
+        return customStack;
     }
 
     private static ItemStack searchOreDictionary(String[] strings) {
