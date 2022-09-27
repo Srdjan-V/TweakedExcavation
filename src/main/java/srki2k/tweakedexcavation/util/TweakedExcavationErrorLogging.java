@@ -10,7 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList;
-import static srki2k.tweakedexcavation.common.Configs.TPConfig.Logging.*;
+import static srki2k.tweakedexcavation.common.Configs.TPConfig.Logging.logMissingPowerTier;
+import static srki2k.tweakedexcavation.common.Configs.TPConfig.Logging.logToPlayers;
+import static srki2k.tweakedexcavation.common.Configs.TPConfig.PowerTiers.defaultPowerTier;
 
 public final class TweakedExcavationErrorLogging implements ICustomLogger {
     public static void register() {
@@ -65,10 +67,11 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
 
     @Override
     public String[] getConfigs() {
-        String[] strings = new String[2];
+        String[] strings = new String[3];
 
         strings[0] = "Log missing reservoirs to players: " + logToPlayers;
         strings[1] = "Log Missing PowerTiers for on startup: " + logMissingPowerTier;
+        strings[2] = "Default Minerals PowerTier: " + defaultPowerTier;
 
         return strings;
     }

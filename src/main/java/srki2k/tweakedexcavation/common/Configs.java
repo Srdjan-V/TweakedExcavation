@@ -19,7 +19,7 @@ public class Configs {
             @Config.RequiresMcRestart
             public static boolean logMissingPowerTier = false;
 
-            @Config.Comment({"Log errors to the player once he joins the game, default=true"})
+            @Config.Comment({"Log startup errors to the player once he joins the game, default=true"})
             @Config.Name("Log errors to players")
             @Config.RequiresMcRestart
             public static boolean logToPlayers = true;
@@ -30,7 +30,7 @@ public class Configs {
         public static PowerTiers powerTiers;
 
         public static class PowerTiers {
-            @Config.Comment({"This will set the power tier of the default IE Minerals, default=0"})
+            @Config.Comment({"This will set the power tier of the default IE Minerals, default=1"})
             @Config.Name("Default Minerals PowerTier")
             @Config.RangeInt(min = 0)
             @Config.RequiresMcRestart
