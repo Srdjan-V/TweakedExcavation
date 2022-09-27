@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList;
-import static srki2k.tweakedexcavation.common.Configs.TPConfig.Logging.logMissingPowerTier;
-import static srki2k.tweakedexcavation.common.Configs.TPConfig.Logging.logToPlayers;
 import static srki2k.tweakedexcavation.common.Configs.TPConfig.PowerTiers.defaultPowerTier;
 
 public final class TweakedExcavationErrorLogging implements ICustomLogger {
@@ -26,18 +24,18 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
 
     @Override
     public boolean doCustomCheck() {
-        if (logMissingPowerTier) {
-            missingPowerTiers();
-            return true;
-        }
-
         return false;
     }
 
     @Override
     public boolean handleRuntimeErrors() {
-        //missingPowerTiersLog()
-        missingPowerTiers();
+        mineralList.keySet().
+                forEach(mineralMix -> {
+                    if (PowerTierHandler.getPowerTier(((IMineralMix) mineralMix).getPowerTier()) == null) {
+                        errors.add("Mineral with the ID (name) " + mineralMix.name + " has no valid Power tier");
+                    }
+                });
+
         return !errors.isEmpty();
     }
 
@@ -47,31 +45,15 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
     }
 
     @Override
-    public boolean logErrorToUsersInGameWithCT() {
-        return logToPlayers;
-    }
-
-    private void missingPowerTiers() {
-        mineralList.keySet().
-                forEach(mineralMix -> {
-                    if (PowerTierHandler.getPowerTier(((IMineralMix) mineralMix).getPowerTier()) == null) {
-                        errors.add("Mineral with the ID (name) " + mineralMix.name + " has no valid Power tier");
-                    }
-                });
-    }
-
-    @Override
     public String getMODID() {
         return TweakedExcavation.MODID;
     }
 
     @Override
     public String[] getConfigs() {
-        String[] strings = new String[3];
+        String[] strings = new String[1];
 
-        strings[0] = "Log missing reservoirs to players: " + logToPlayers;
-        strings[1] = "Log Missing PowerTiers for on startup: " + logMissingPowerTier;
-        strings[2] = "Default Minerals PowerTier: " + defaultPowerTier;
+        strings[0] = "Default Minerals PowerTier: " + defaultPowerTier;
 
         return strings;
     }
