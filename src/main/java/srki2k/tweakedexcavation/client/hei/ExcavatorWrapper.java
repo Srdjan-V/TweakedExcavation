@@ -20,7 +20,6 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
         this.mineralMix = mineralMix;
     }
 
-
     public List<ItemStack> getMinerals() {
         return mineralMix.oreOutput;
     }
@@ -68,7 +67,8 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     @SuppressWarnings("NullableProblems")
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         if (getStringWidth() > 115) {
-            minecraft.fontRenderer.drawString(minecraft.fontRenderer.trimStringToWidth(mineralMix.name, 109).concat("..."), 8, 9, 15658734);
+            minecraft.fontRenderer.drawString(minecraft.fontRenderer.trimStringToWidth(
+                    BaseHEIUtil.formatString(mineralMix.name), 109).concat("..."), 8, 9, 15658734);
             return;
         }
         minecraft.fontRenderer.drawString(mineralMix.name, 8, 9, 15658734);
@@ -78,7 +78,18 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
         tooltip.clear();
         tooltip.add(ingredient.getDisplayName());
-        tooltip.add(BaseHEIUtil.translateToLocalFormatted("tweakedexcavation.jei.chance", BaseHEIUtil.percentFormat.format(mineralMix.recalculatedChances[slotIndex] * 100) + "%"));
+        tooltip.add(BaseHEIUtil.translateToLocalFormatted("tweakedexcavation.jei.mineral.chance",
+                BaseHEIUtil.percentFormat.format(mineralMix.recalculatedChances[slotIndex] * 100) + "%"));
+        depletion(tooltip, slotIndex);
+    }
+
+    private void depletion(List<String> tooltip, int slotIndex) {
+        if (((IMineralMix) mineralMix).getYield() < 0) {
+            tooltip.add(BaseHEIUtil.translateToLocal("tweakedexcavation.jei.mineral.average.Infinite"));
+            return;
+        }
+        tooltip.add(BaseHEIUtil.translateToLocalFormatted("tweakedexcavation.jei.mineral.average",
+                BaseHEIUtil.numberFormat.format((int) (((IMineralMix) mineralMix).getYield() * mineralMix.recalculatedChances[slotIndex]))));
     }
 
 }

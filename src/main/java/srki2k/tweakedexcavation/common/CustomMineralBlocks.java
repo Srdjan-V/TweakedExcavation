@@ -6,29 +6,46 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.HashMap;
+
 public class CustomMineralBlocks {
-    public static ItemStack getBlocks(String blockId) {
-        ItemStack customStack = ItemStack.EMPTY;
+
+    private static final HashMap<String, ItemStack> startupMineralBlocksCache = new HashMap<>();
+
+    public static void cleanCache() {
+        startupMineralBlocksCache.clear();
+    }
+
+    public static ItemStack getBlocksFromCache(String blockId) {
+        return startupMineralBlocksCache.get(blockId);
+    }
+
+    public static boolean searchBlock(String blockId) {
+        ItemStack customStack;
 
         String[] strings = blockId.split(":");
 
         if (strings.length == 1) {
-            return customStack;
+            return false;
         }
 
         if (strings.length == 2) {
             customStack = searchOreDictionary(strings);
             if (customStack != ItemStack.EMPTY) {
-                return customStack;
+                startupMineralBlocksCache.put(blockId, customStack);
+                return true;
             }
         }
 
         if (strings.length == 2 || strings.length == 3) {
             customStack = searchBlock(strings);
-            return customStack;
+            if (customStack != ItemStack.EMPTY) {
+                startupMineralBlocksCache.put(blockId, customStack);
+                return true;
+            }
         }
 
-        return customStack;
+        return false;
     }
 
     private static ItemStack searchOreDictionary(String[] strings) {

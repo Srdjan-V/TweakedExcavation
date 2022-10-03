@@ -4,11 +4,15 @@ import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.IEApi;
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import srki2k.tweakedexcavation.api.ihelpers.IMineralMix;
 import srki2k.tweakedexcavation.common.CustomMineralBlocks;
 
@@ -48,10 +52,22 @@ public class MixinMineralMix implements IMineralMix {
     }
 
     @Override
-    public void setPowerTier(int i) {
-        powerTier = i;
+    public void setPowerTier(int powerTier) {
+        this.powerTier = powerTier;
     }
 
+    @Unique
+    int yield = ExcavatorHandler.mineralVeinCapacity;
+
+    @Override
+    public int getYield() {
+        return yield;
+    }
+
+    @Override
+    public void setYield(int yield) {
+        this.yield = yield;
+    }
 
     /**
      * @author Srki_2K
@@ -71,12 +87,12 @@ public class MixinMineralMix implements IMineralMix {
             }
 
             if (ore != null && !ore.isEmpty()) {
-                ItemStack preferredOre;
+                ItemStack preferredOre = ItemStack.EMPTY;
 
-                preferredOre = IEApi.getPreferredOreStack(ore);
-
-                if (preferredOre == ItemStack.EMPTY) {
-                    preferredOre = CustomMineralBlocks.getBlocks(ore);
+                if (CustomMineralBlocks.searchBlock(ore)) {
+                    preferredOre = CustomMineralBlocks.getBlocksFromCache(ore);
+                } else if (ApiUtils.isExistingOreName(ore)) {
+                    preferredOre = IEApi.getPreferredOreStack(ore);
                 }
 
                 if (!preferredOre.isEmpty()) {
@@ -122,6 +138,21 @@ public class MixinMineralMix implements IMineralMix {
         }
 
         return true;
+    }
+
+    @Inject(method = "readFromNBT", at = @At("RETURN"))
+    private static void onReadFromNBT(NBTTagCompound nbt, CallbackInfoReturnable<ExcavatorHandler.MineralMix> cir) {
+        IMineralMix mineral = (IMineralMix) cir.getReturnValue();
+
+        mineral.setPowerTier(nbt.getInteger("powerTier"));
+        mineral.setYield(nbt.getInteger("yield"));
+    }
+
+    @Inject(method = "writeToNBT", at = @At("RETURN"))
+    public void onWriteToNBT(CallbackInfoReturnable<NBTTagCompound> cir) {
+        NBTTagCompound tag = cir.getReturnValue();
+        tag.setInteger("powerTier", this.powerTier);
+        tag.setInteger("yield", this.yield);
     }
 
 }

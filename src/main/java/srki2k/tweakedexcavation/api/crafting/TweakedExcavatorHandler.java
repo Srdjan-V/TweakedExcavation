@@ -11,7 +11,6 @@ import srki2k.tweakedlib.api.powertier.PowerTierHandler;
 import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.*;
 
 public class TweakedExcavatorHandler {
-    private static final int depositSize = 1;
 
     /**
      * Gets the PowerTier object associated with the mineral of a given chunk

@@ -4,7 +4,11 @@ public interface IMineralMix {
 
     int getPowerTier();
 
-    void setPowerTier(int i);
+    void setPowerTier(int powerTier);
+
+    int getYield();
+
+    void setYield(int yield);
 
 }
 

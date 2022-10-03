@@ -1,5 +1,6 @@
 package srki2k.tweakedexcavation.util;
 
+import org.apache.logging.log4j.Logger;
 import srki2k.tweakedexcavation.TweakedExcavation;
 import srki2k.tweakedexcavation.api.ihelpers.IMineralMix;
 import srki2k.tweakedlib.api.logging.errorlogginglib.ErrorLoggingLib;
@@ -23,12 +24,12 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
     List<String> errors = new ArrayList<>();
 
     @Override
-    public boolean doCustomCheck() {
+    public boolean startupChecks() {
         return false;
     }
 
     @Override
-    public boolean handleRuntimeErrors() {
+    public boolean runtimeChecks() {
         mineralList.keySet().
                 forEach(mineralMix -> {
                     if (PowerTierHandler.getPowerTier(((IMineralMix) mineralMix).getPowerTier()) == null) {
@@ -45,8 +46,8 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
     }
 
     @Override
-    public String getMODID() {
-        return TweakedExcavation.MODID;
+    public Logger getModLogger() {
+        return TweakedExcavation.LOGGER;
     }
 
     @Override
