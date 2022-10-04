@@ -18,10 +18,13 @@ import srki2k.tweakedexcavation.common.CustomMineralBlocks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 @Mixin(value = ExcavatorHandler.MineralMix.class, remap = false)
 public class MixinMineralMix implements IMineralMix {
 
+    @Shadow
+    public String name;
     @Shadow
     public String[] ores;
     @Shadow
@@ -153,6 +156,20 @@ public class MixinMineralMix implements IMineralMix {
         NBTTagCompound tag = cir.getReturnValue();
         tag.setInteger("powerTier", this.powerTier);
         tag.setInteger("yield", this.yield);
+    }
+
+    //Equals and hashCode methods
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MixinMineralMix that = (MixinMineralMix) o;
+        return name.equals(that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
 }

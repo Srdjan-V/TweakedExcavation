@@ -13,6 +13,8 @@ import srki2k.tweakedlib.api.hei.BaseHEIUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList;
+
 public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemStack> {
     private final ExcavatorHandler.MineralMix mineralMix;
 
@@ -53,6 +55,10 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
 
             if (mouseX > 138 && mouseX < 151) {
                 List<String> list = new ArrayList<>();
+
+                list.add(BaseHEIUtil.translateToLocalFormatted("tweakedexcavation.jei.mineral.weight", mineralList.get(mineralMix)));
+                list.add("");
+
                 BaseHEIUtil.dimensionListData(list, mineralMix.dimensionWhitelist, mineralMix.dimensionBlacklist);
 
                 return list;
