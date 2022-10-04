@@ -4,11 +4,10 @@ import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import net.minecraft.world.World;
 import srki2k.tweakedexcavation.api.ihelpers.IMineralMix;
 import srki2k.tweakedexcavation.api.ihelpers.IMineralWorldInfo;
-import srki2k.tweakedlib.api.logging.errorlogginglib.ErrorLoggingLib;
 import srki2k.tweakedlib.api.powertier.PowerTier;
 import srki2k.tweakedlib.api.powertier.PowerTierHandler;
 
-import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.*;
+import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList;
 
 public class TweakedExcavatorHandler {
 
@@ -28,11 +27,6 @@ public class TweakedExcavatorHandler {
         }
 
         IMineralMix tweakedMineralMix = (IMineralMix) info.getType();
-
-        if (PowerTierHandler.getPowerTier(tweakedMineralMix.getPowerTier()) == null) {
-            ErrorLoggingLib.runtimeErrorLogging();
-        }
-
         return PowerTierHandler.getPowerTier(tweakedMineralMix.getPowerTier());
     }
 

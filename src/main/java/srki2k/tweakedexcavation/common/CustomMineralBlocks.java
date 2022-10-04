@@ -21,7 +21,9 @@ public class CustomMineralBlocks {
     }
 
     public static boolean searchBlock(String blockId) {
-        ItemStack customStack;
+        if (startupMineralBlocksCache.containsKey(blockId)) {
+            return true;
+        }
 
         String[] strings = blockId.split(":");
 
@@ -29,6 +31,7 @@ public class CustomMineralBlocks {
             return false;
         }
 
+        ItemStack customStack;
         if (strings.length == 2) {
             customStack = searchOreDictionary(strings);
             if (customStack != ItemStack.EMPTY) {
