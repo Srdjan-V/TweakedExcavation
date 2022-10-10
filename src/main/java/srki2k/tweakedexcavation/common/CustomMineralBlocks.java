@@ -7,10 +7,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class CustomMineralBlocks {
 
-    private static final HashMap<String, ItemStack> startupMineralBlocksCache = new HashMap<>();
+    private static final Map<String, ItemStack> startupMineralBlocksCache = new HashMap<>();
 
     public static void cleanCache() {
         startupMineralBlocksCache.clear();

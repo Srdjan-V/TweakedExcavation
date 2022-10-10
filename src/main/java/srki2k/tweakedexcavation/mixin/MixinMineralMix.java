@@ -92,10 +92,10 @@ public class MixinMineralMix implements IMineralMix {
             if (ore != null && !ore.isEmpty()) {
                 ItemStack preferredOre = ItemStack.EMPTY;
 
-                if (CustomMineralBlocks.searchBlock(ore)) {
-                    preferredOre = CustomMineralBlocks.getBlocksFromCache(ore);
-                } else if (ApiUtils.isExistingOreName(ore)) {
+                if (ApiUtils.isExistingOreName(ore)) {
                     preferredOre = IEApi.getPreferredOreStack(ore);
+                } else if (CustomMineralBlocks.searchBlock(ore)) {
+                    preferredOre = CustomMineralBlocks.getBlocksFromCache(ore);
                 }
 
                 if (!preferredOre.isEmpty()) {

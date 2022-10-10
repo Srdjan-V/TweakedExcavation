@@ -32,7 +32,7 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
     public boolean runtimeChecks() {
         mineralList.keySet().
                 forEach(mineralMix -> {
-                    if (PowerTierHandler.getPowerTier(((IMineralMix) mineralMix).getPowerTier()) == null) {
+                    if (!PowerTierHandler.powerTierExists(((IMineralMix) mineralMix).getPowerTier())) {
                         errors.add("Mineral with the ID (name) " + mineralMix.name + " has no valid Power tier");
                     }
                 });

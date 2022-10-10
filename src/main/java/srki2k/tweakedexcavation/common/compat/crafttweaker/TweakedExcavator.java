@@ -7,6 +7,7 @@ import srki2k.tweakedexcavation.api.crafting.TweakedExcavatorHandler;
 import srki2k.tweakedexcavation.api.ihelpers.IMineralMix;
 import stanhebben.zenscript.annotations.*;
 
+@SuppressWarnings("unused")
 @ZenClass("mods.TweakedExcavation.TweakedExcavator")
 @ZenRegister
 public class TweakedExcavator {
@@ -60,10 +61,12 @@ public class TweakedExcavator {
                 return new TweakedMineral(mix);
             }
         }
+        CraftTweakerAPI.logError("No Mineral with name: " + name + " was found");
         return null;
     }
 
-    @ZenClass("mods.TweakedExcavation.TweakedMineralPowerTier")
+    @ZenClass("mods.TweakedExcavation.TweakedMineral")
+    @ZenRegister
     public static class TweakedMineral {
         IMineralMix mix;
 
