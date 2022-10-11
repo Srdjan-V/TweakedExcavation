@@ -8,16 +8,24 @@ public class Configs {
     @Config(modid = TweakedExcavation.MODID)
     public static class TPConfig {
 
-        @Config.Name("Default Power Tiers")
-        public static PowerTiers powerTiers;
+            @Config.Name("Default Excavator Power Tiers")
+            public static DefaultExcavatorPowerTiers defaultExcavatorPowerTiers;
 
-        public static class PowerTiers {
-            @Config.Comment({"This will set the power tier of the default IE Minerals, default=1"})
-            @Config.Name("Default Minerals PowerTier")
-            @Config.RangeInt(min = 0)
-            @Config.RequiresMcRestart
-            public static int defaultPowerTier = 1;
-        }
+            public static class DefaultExcavatorPowerTiers {
+
+                @Config.Comment({"This will set the capacity of the excavator, default=64000"})
+                @Config.Name("Default capacity")
+                @Config.RangeInt(min = 1)
+                @Config.RequiresMcRestart
+                public static int capacity = 64000;
+
+                @Config.Comment({"This will set the power consumption of the excavator, default=4096"})
+                @Config.Name("Default consumption")
+                @Config.RangeInt(min = 1)
+                @Config.RequiresMcRestart
+                public static int rft = 4096;
+
+            }
 
     }
 

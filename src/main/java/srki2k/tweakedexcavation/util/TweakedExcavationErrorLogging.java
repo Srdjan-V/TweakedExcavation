@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList;
-import static srki2k.tweakedexcavation.common.Configs.TPConfig.PowerTiers.defaultPowerTier;
+import static srki2k.tweakedexcavation.common.Configs.TPConfig.DefaultExcavatorPowerTiers.capacity;
+import static srki2k.tweakedexcavation.common.Configs.TPConfig.DefaultExcavatorPowerTiers.rft;
 
 public final class TweakedExcavationErrorLogging implements ICustomLogger {
     public static void register() {
@@ -52,9 +53,11 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
 
     @Override
     public String[] getConfigs() {
-        String[] strings = new String[1];
+        String[] strings = new String[3];
 
-        strings[0] = "Default Minerals PowerTier: " + defaultPowerTier;
+        strings[0] = "Default Excavator Power Tiers:";
+        strings[1] = "Default capacity: " + capacity;
+        strings[2] = "Default consumption: " + rft;
 
         return strings;
     }
