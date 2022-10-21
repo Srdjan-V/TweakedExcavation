@@ -18,7 +18,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,17 +27,17 @@ import srki2k.tweakedexcavation.api.crafting.TweakedExcavatorHandler;
 import srki2k.tweakedexcavation.api.ihelpers.IExcavatorAddons;
 import srki2k.tweakedlib.api.powertier.PowerTierHandler;
 
-@Mixin(value = TileEntityExcavator.class, remap = false)
+@Mixin(value = TileEntityExcavator.class)
 public abstract class MixinTileEntityExcavator extends TileEntityMultiblockMetal<TileEntityExcavator, IMultiblockRecipe> implements IExcavatorAddons {
 
 
     //Shadow Variables
-    @Shadow
+    @Shadow(remap = false)
     public boolean active;
 
 
     //Shadow Methods
-    @Shadow
+    @Shadow(remap = false)
     abstract ItemStack digBlocksInTheWay(TileEntityBucketWheel wheel);
 
 
@@ -60,13 +59,10 @@ public abstract class MixinTileEntityExcavator extends TileEntityMultiblockMetal
         energyStorage.setLimitTransfer(0);
     }
 
-    /**
-     * @author Srki_2K
-     * @reason Implementing Power Tiers and custom block extraction
-     */
-    @Overwrite
-    public void update() {
-
+    //Injecting intend of overviewing for TickCentral compatability
+    @Inject(method = "update", at = @At("HEAD"), cancellable = true)
+    @Override
+    public void onUpdate(CallbackInfo ci) {
         super.update();
         if (!this.isDummy()) {
             BlockPos wheelPos = this.getBlockPosForPos(31);
@@ -174,6 +170,7 @@ public abstract class MixinTileEntityExcavator extends TileEntityMultiblockMetal
             }
 
         }
+        ci.cancel();
     }
 
 }

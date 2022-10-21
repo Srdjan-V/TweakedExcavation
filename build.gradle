@@ -19,6 +19,7 @@ plugins {
 
 apply {
     plugin 'net.minecraftforge.gradle'
+    plugin 'org.spongepowered.mixin'
     plugin 'java'
     plugin 'idea'
 }
@@ -111,7 +112,6 @@ repositories {
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
-
 }
 
 dependencies {
@@ -133,6 +133,8 @@ dependencies {
     compileOnly('zone.rong:mixinbooter:5.0')
     runtimeOnly('zone.rong:mixinbooter:5.0')
 
+    implementation "org.spongepowered:mixin:0.8.5"
+    annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }
 
 git {
@@ -145,12 +147,12 @@ git {
     }
 }
 
+mixin {
+    add sourceSets.main, 'mixins.' + archives_base_name + '.refmap.json'
+}
+
 sourceSets {
     main {
-        if (project.use_mixins.toBoolean()) {
-            ext.refMap = 'mixins.' + archives_base_name + '.refmap.json'
-        }
-
         java {
             srcDirs = ["src/main/java"]
         }
