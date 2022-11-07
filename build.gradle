@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         if (project.use_mixins.toBoolean()) {
-            classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+            classpath 'org.spongepowered:mixingradle:0.7.+'
         }
     }
 }
@@ -112,10 +112,15 @@ repositories {
         name = "Progwml6 maven"
         url = "https://dvs1.progwml6.com/files/maven/"
     }
+    mavenLocal()
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+
+    //Maven local
+    implementation "srki2k:TweakedLib:${project.tweaked_lib_version}"
+    implementation("com.cleanroommc:GroovyScriptFg5:${project.groovy_script_version}") { transitive = false }
 
     implementation 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.679'
     runtimeOnly fg.deobf('curse.maven:ImmersivePetroleum-268250:3382321')
@@ -136,7 +141,7 @@ dependencies {
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }
 
-git {
+/*git {
     def props = new Properties()
     new File("${project.projectDir}/gradle.properties").withInputStream { props.load(it) }
 
@@ -144,7 +149,7 @@ git {
         name 'TweakedLib'
         commit "v${props.getProperty('tweaked_lib_version')}"
     }
-}
+}*/
 
 mixin {
     add sourceSets.main, 'mixins.' + archives_base_name + '.refmap.json'
@@ -270,4 +275,18 @@ artifacts {
     if (project.build_sourceJar.toBoolean()) {
         archives sourcesJar
     }
+}
+
+task setGitTag() {
+    def tagName = "v${project.version}"
+    def currentTags = ("git describe --tags --abbrev=0").execute().inputStream.readLines().get(0)
+
+    if (tagName == currentTags) {
+        project.logger.lifecycle('Current project version is the same as the latest tag')
+        return
+    }
+
+    project.logger.lifecycle('Pushing tag{}',tagName)
+    ("git tag $tagName").execute()
+    ("git push --tags").execute()
 }
