@@ -29,21 +29,18 @@ import srki2k.tweakedlib.api.powertier.PowerTierHandler;
 
 @Mixin(value = TileEntityExcavator.class)
 public abstract class MixinTileEntityExcavator extends TileEntityMultiblockMetal<TileEntityExcavator, IMultiblockRecipe> implements IExcavatorAddons {
+    public MixinTileEntityExcavator(MultiblockHandler.IMultiblock mutliblockInstance, int[] structureDimensions, int energyCapacity, boolean redstoneControl) {
+        super(mutliblockInstance, structureDimensions, energyCapacity, redstoneControl);
+    }
 
 
     //Shadow Variables
     @Shadow(remap = false)
     public boolean active;
 
-
     //Shadow Methods
     @Shadow(remap = false)
     abstract ItemStack digBlocksInTheWay(TileEntityBucketWheel wheel);
-
-
-    public MixinTileEntityExcavator(MultiblockHandler.IMultiblock mutliblockInstance, int[] structureDimensions, int energyCapacity, boolean redstoneControl) {
-        super(mutliblockInstance, structureDimensions, energyCapacity, redstoneControl);
-    }
 
     @Unique
     @Override

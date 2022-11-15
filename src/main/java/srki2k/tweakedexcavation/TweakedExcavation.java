@@ -11,7 +11,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import srki2k.tweakedexcavation.common.CustomMineralBlocks;
+import srki2k.tweakedexcavation.common.DefaultMineralPower;
+import srki2k.tweakedexcavation.common.compat.groovyscript.GroovyScriptCompat;
 import srki2k.tweakedexcavation.util.TweakedExcavationErrorLogging;
+import srki2k.tweakedlib.util.Constants;
 
 
 @Mod(modid = TweakedExcavation.MODID,
@@ -36,6 +39,9 @@ public class TweakedExcavation {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
+        if (Constants.isGroovyScriptLoaded()) {
+            GroovyScriptCompat.init();
+        }
     }
 
     @Mod.EventHandler
@@ -45,6 +51,7 @@ public class TweakedExcavation {
 
     @Mod.EventHandler
     public void loadComplete(FMLLoadCompleteEvent event) {
+        DefaultMineralPower.clear();
         CustomMineralBlocks.cleanCache();
     }
 

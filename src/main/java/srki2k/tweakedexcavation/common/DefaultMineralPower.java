@@ -12,6 +12,11 @@ public class DefaultMineralPower {
         }
         return instance;
     }
+
+    public static void clear() {
+        instance = null;
+    }
+
     private DefaultMineralPower() {
         powerTier = PowerTierHandler.registerPowerTier(
                 Configs.TPConfig.DefaultExcavatorPowerTiers.capacity,

@@ -29,7 +29,7 @@ public class TweakedExcavator {
                                       int[] dimBlacklist, int[] dimWhitelist) {
 
         if (name.isEmpty()) {
-            CraftTweakerAPI.logError("Reservoir name can not be a empty string!");
+            CraftTweakerAPI.logError("Mineral name can not be a empty string!");
         }
         if (ores.length != chances.length) {
             CraftTweakerAPI.logError("Mineral(" + name + ") is missing ores or chances in the Arrays");
