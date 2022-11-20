@@ -6,10 +6,12 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import srki2k.tweakedexcavation.api.ihelpers.IMineralMix;
 import srki2k.tweakedexcavation.api.ihelpers.IMineralWorldInfo;
 import srki2k.tweakedexcavation.common.DefaultMineralPower;
+import srki2k.tweakedlib.util.Constants;
 
 import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.getMineralWorldInfo;
 
@@ -46,4 +48,12 @@ public class MixinExcavatorHandler {
     private static void addMineral(String name, int mineralWeight, float failChance, String[] ores, float[] chances, CallbackInfoReturnable<ExcavatorHandler.MineralMix> cir) {
         ((IMineralMix) cir.getReturnValue()).setPowerTier(DefaultMineralPower.getInstance().getPowerTier());
     }
+
+    @Inject(method = "recalculateChances", at = @At(value = "HEAD"), cancellable = true)
+    private static void onlyRecalculateChances(boolean mutePackets, CallbackInfo ci) {
+        if (Constants.isGroovyScriptLoaded() && !Constants.isCraftTweakerLoaded()) {
+            ci.cancel();
+        }
+    }
+
 }

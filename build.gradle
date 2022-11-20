@@ -135,8 +135,8 @@ dependencies {
     //implementation fg.deobf('mezz.jei:jei_1.12.2:4.16.1.302')
     implementation fg.deobf('curse.maven:had-enough-items-557549:3862733')
 
-    compileOnly('zone.rong:mixinbooter:5.0')
-    runtimeOnly('zone.rong:mixinbooter:5.0')
+    compileOnly('zone.rong:mixinbooter:7.0')
+    runtimeOnly('zone.rong:mixinbooter:7.0')
 
     annotationProcessor "org.spongepowered:mixin:0.8.5:processor"
 }

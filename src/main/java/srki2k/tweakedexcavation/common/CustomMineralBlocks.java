@@ -1,12 +1,13 @@
 package srki2k.tweakedexcavation.common;
 
 import net.minecraft.block.Block;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CustomMineralBlocks {
@@ -53,19 +54,29 @@ public class CustomMineralBlocks {
     }
 
     private static ItemStack searchOreDictionary(String[] strings) {
-        ItemStack customStack;
-        for (ItemStack stack : OreDictionary.getOres(strings[1])) {
-            if (!stack.isEmpty()) {
-                ResourceLocation rl = Item.REGISTRY.getNameForObject(stack.getItem());
+        List<ItemStack> ores = OreDictionary.getOres(strings[1]);
 
-                if (rl.getNamespace().equals(strings[0])) {
-                    customStack = stack;
+        if (ores.size() == 1) {
+            ItemStack itemStack = ores.get(0);
+            if (!itemStack.isEmpty()) {
+                return itemStack.copy();
+            }
+            return ItemStack.EMPTY;
+        }
+
+        for (ItemStack stack : ores) {
+            if (!stack.isEmpty()) {
+
+                ResourceLocation rl = ForgeRegistries.ITEMS.getKey(stack.getItem());
+                ItemStack customStack;
+                if (strings[0].equals(rl.getNamespace())) {
+                    customStack = stack.copy();
 
                     if (customStack.getMetadata() == 32767) {
                         customStack.setItemDamage(0);
                     }
 
-                    return customStack.copy();
+                    return customStack;
                 }
             }
         }
@@ -73,17 +84,17 @@ public class CustomMineralBlocks {
     }
 
     private static ItemStack searchBlock(String[] strings) {
-        ItemStack customStack;
-        Block block = Block.getBlockFromName(strings[0] + ":" + strings[1]);
+        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(strings[0] + ":" + strings[1]));
 
         if (block != null) {
-            customStack = new ItemStack(block);
-
             if (strings.length == 3) {
-                customStack.setItemDamage(Integer.parseInt(strings[2]));
+                try {
+                    return new ItemStack(block, 1, Integer.parseInt(strings[2]));
+                } catch (NumberFormatException ignored) {
+                }
             }
 
-            return customStack.copy();
+            return new ItemStack(block, 1);
         }
         return ItemStack.EMPTY;
     }

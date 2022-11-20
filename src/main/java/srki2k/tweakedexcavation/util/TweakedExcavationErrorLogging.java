@@ -22,7 +22,7 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
     private TweakedExcavationErrorLogging() {
     }
 
-    List<String> errors = new ArrayList<>();
+    private final List<String> errors = new ArrayList<>();
 
     @Override
     public boolean startupChecks() {
