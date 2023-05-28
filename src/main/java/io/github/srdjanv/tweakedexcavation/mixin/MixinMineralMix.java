@@ -94,8 +94,8 @@ public class MixinMineralMix implements IMineralMix {
 
                 if (ApiUtils.isExistingOreName(ore)) {
                     preferredOre = IEApi.getPreferredOreStack(ore);
-                } else if (CustomMineralBlocks.searchBlock(ore)) {
-                    preferredOre = CustomMineralBlocks.getBlocksFromCache(ore);
+                } else if (CustomMineralBlocks.getInstance().searchBlock(ore)) {
+                    preferredOre = CustomMineralBlocks.getInstance().getBlocksFromCache(ore);
                 }
 
                 if (!preferredOre.isEmpty()) {

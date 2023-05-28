@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 @Mod(modid = TweakedExcavation.MODID,
         version = TweakedExcavation.VERSION,
         name = "Tweaked Excavation",

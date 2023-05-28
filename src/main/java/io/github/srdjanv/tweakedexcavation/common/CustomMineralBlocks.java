@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.HashMap;
@@ -11,17 +12,27 @@ import java.util.Map;
 
 public class CustomMineralBlocks {
 
-    private static final Map<String, ItemStack> startupMineralBlocksCache = new HashMap<>();
+    private static CustomMineralBlocks instance;
 
-    public static void cleanCache() {
-        startupMineralBlocksCache.clear();
+    public static CustomMineralBlocks getInstance() {
+        if (instance == null) instance = new CustomMineralBlocks();
+        return instance;
     }
 
-    public static ItemStack getBlocksFromCache(String blockId) {
+    public static void cleanCache() {
+        instance = null;
+    }
+
+    private CustomMineralBlocks() {
+    }
+
+    private final Map<String, ItemStack> startupMineralBlocksCache = new HashMap<>();
+
+    public ItemStack getBlocksFromCache(String blockId) {
         return startupMineralBlocksCache.get(blockId);
     }
 
-    public static boolean searchBlock(String blockId) {
+    public boolean searchBlock(String blockId) {
         if (startupMineralBlocksCache.containsKey(blockId)) {
             return true;
         }
@@ -52,7 +63,7 @@ public class CustomMineralBlocks {
         return false;
     }
 
-    private static ItemStack searchOreDictionary(String[] strings) {
+    private ItemStack searchOreDictionary(String[] strings) {
         ItemStack customStack;
         for (ItemStack stack : OreDictionary.getOres(strings[1])) {
             if (!stack.isEmpty()) {
@@ -61,7 +72,7 @@ public class CustomMineralBlocks {
                 if (rl.getNamespace().equals(strings[0])) {
                     customStack = stack;
 
-                    if (customStack.getMetadata() == 32767) {
+                    if (customStack.getMetadata() == Short.MAX_VALUE) {
                         customStack.setItemDamage(0);
                     }
 
@@ -73,19 +84,18 @@ public class CustomMineralBlocks {
     }
 
     private static ItemStack searchBlock(String[] strings) {
-        ItemStack customStack;
-        Block block = Block.getBlockFromName(strings[0] + ":" + strings[1]);
-
-        if (block != null) {
-            customStack = new ItemStack(block);
-
-            if (strings.length == 3) {
-                customStack.setItemDamage(Integer.parseInt(strings[2]));
-            }
-
-            return customStack.copy();
+        Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(strings[0] + ":" + strings[1]));
+        if (block == null) {
+            return ItemStack.EMPTY;
         }
-        return ItemStack.EMPTY;
+
+        if (strings.length == 3) {
+            try {
+                return new ItemStack(block, 1, Integer.parseInt(strings[2]));
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return new ItemStack(block, 1);
     }
 
 }
