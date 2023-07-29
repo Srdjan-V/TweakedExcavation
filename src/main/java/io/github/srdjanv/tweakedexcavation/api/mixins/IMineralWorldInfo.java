@@ -1,4 +1,4 @@
-package io.github.srdjanv.tweakedexcavation.api.ihelpers;
+package io.github.srdjanv.tweakedexcavation.api.mixins;
 
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 

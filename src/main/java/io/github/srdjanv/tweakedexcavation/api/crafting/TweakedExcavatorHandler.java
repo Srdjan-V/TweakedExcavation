@@ -1,11 +1,11 @@
 package io.github.srdjanv.tweakedexcavation.api.crafting;
 
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IMineralWorldInfo;
-import net.minecraft.world.World;
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IMineralMix;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralWorldInfo;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTier;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTierHandler;
+import net.minecraft.world.World;
 
 import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList;
 

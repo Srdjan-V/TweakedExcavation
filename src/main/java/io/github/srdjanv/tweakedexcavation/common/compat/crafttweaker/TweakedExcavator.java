@@ -4,7 +4,7 @@ import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import io.github.srdjanv.tweakedexcavation.api.crafting.TweakedExcavatorHandler;
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IMineralMix;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import stanhebben.zenscript.annotations.*;
 
 @SuppressWarnings("unused")

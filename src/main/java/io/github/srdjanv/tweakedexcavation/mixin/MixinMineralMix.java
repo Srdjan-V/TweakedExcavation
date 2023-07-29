@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IMineralMix;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
 
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
 package io.github.srdjanv.tweakedexcavation.mixin;
 
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IMineralMix;
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IMineralWorldInfo;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralWorldInfo;
 import io.github.srdjanv.tweakedexcavation.common.DefaultMineralPower;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;

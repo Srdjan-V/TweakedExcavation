@@ -1,7 +1,7 @@
 package io.github.srdjanv.tweakedexcavation.mixin;
 
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IMineralWorldInfo;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralWorldInfo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 

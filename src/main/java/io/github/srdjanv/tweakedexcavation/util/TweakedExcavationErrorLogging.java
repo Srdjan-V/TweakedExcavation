@@ -1,6 +1,6 @@
 package io.github.srdjanv.tweakedexcavation.util;
 
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IMineralMix;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.common.Configs;
 import org.apache.logging.log4j.Logger;
 import io.github.srdjanv.tweakedexcavation.TweakedExcavation;

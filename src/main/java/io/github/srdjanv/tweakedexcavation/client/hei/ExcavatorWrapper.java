@@ -1,7 +1,7 @@
 package io.github.srdjanv.tweakedexcavation.client.hei;
 
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IMineralMix;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import mezz.jei.api.gui.ITooltipCallback;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
