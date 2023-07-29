@@ -11,7 +11,7 @@ import blusunrize.immersiveengineering.common.blocks.metal.TileEntityMultiblockM
 import blusunrize.immersiveengineering.common.util.Utils;
 import blusunrize.immersiveengineering.common.util.network.MessageTileSync;
 import io.github.srdjanv.tweakedexcavation.api.crafting.TweakedExcavatorHandler;
-import io.github.srdjanv.tweakedexcavation.api.ihelpers.IExcavatorAddons;
+import io.github.srdjanv.tweakedexcavation.api.mixins.IExcavatorAddons;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -57,7 +57,7 @@ public abstract class MixinTileEntityExcavator extends TileEntityMultiblockMetal
         energyStorage.setLimitTransfer(0);
     }
 
-    //Injecting intend of overviewing for TickCentral compatability
+    //Injecting intend of overviewing for TickCentral compatibility
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
     @Override
     public void onUpdate(CallbackInfo ci) {
@@ -67,6 +67,9 @@ public abstract class MixinTileEntityExcavator extends TileEntityMultiblockMetal
             if (!this.world.isRemote && this.world.isBlockLoaded(wheelPos)) {
                 if (energyStorage.getMaxEnergyStored() == Integer.MAX_VALUE) {
                     initEnergyStorage();
+                    if (energyStorage.getMaxEnergyStored() == Integer.MAX_VALUE) {
+                        energyStorage.setMaxExtract(1);
+                    }
                 }
 
                 TileEntity center = this.world.getTileEntity(wheelPos);
@@ -104,12 +107,10 @@ public abstract class MixinTileEntityExcavator extends TileEntityMultiblockMetal
 
 
                     if (!this.isRSDisabled()) {
-
-                        ExcavatorHandler.MineralMix mineral = ExcavatorHandler.getRandomMineral(this.world, wheelPos.getX() >> 4, wheelPos.getZ() >> 4);
                         consumed = energyStorage.getLimitExtract();
-
                         int extracted = this.energyStorage.extractEnergy(consumed, true);
                         if (extracted >= consumed) {
+                            ExcavatorHandler.MineralMix mineral = ExcavatorHandler.getRandomMineral(this.world, wheelPos.getX() >> 4, wheelPos.getZ() >> 4);
                             this.energyStorage.extractEnergy(consumed, false);
                             this.active = true;
                             if (target >= 0) {
