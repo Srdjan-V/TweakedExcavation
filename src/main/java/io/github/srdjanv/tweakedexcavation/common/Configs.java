@@ -6,7 +6,7 @@ import io.github.srdjanv.tweakedexcavation.TweakedExcavation;
 public class Configs {
 
     @Config(modid = TweakedExcavation.MODID)
-    public static class TPConfig {
+    public static class TEConfig {
 
             @Config.Name("Default Excavator Power Tiers")
             public static DefaultExcavatorPowerTiers defaultExcavatorPowerTiers;
@@ -26,6 +26,19 @@ public class Configs {
                 public static int rft = 4096;
 
             }
+
+        @Config.Name("JEI Config")
+        public static HEIConfig heiConfig;
+
+        public static class HEIConfig {
+
+            @Config.Name("Draw PowerTier")
+            public static boolean drawPowerTier = true;
+
+            @Config.Name("Draw SpawnWeight")
+            public static boolean drawSpawnWeight = true;
+
+        }
 
     }
 

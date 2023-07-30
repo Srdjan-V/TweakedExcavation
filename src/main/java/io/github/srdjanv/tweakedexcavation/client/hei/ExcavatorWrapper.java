@@ -2,6 +2,7 @@ package io.github.srdjanv.tweakedexcavation.client.hei;
 
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
+import io.github.srdjanv.tweakedexcavation.common.Configs;
 import mezz.jei.api.gui.ITooltipCallback;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -72,6 +73,9 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     @Override
     @SuppressWarnings("NullableProblems")
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+        if (Configs.TEConfig.HEIConfig.drawPowerTier) BaseHEIUtil.drawPowerTier(minecraft,122, 7, ((IMineralMix) mineralMix).getPowerTier());
+        if (Configs.TEConfig.HEIConfig.drawSpawnWeight) BaseHEIUtil.drawSpawnWeight(minecraft,138, 7, mineralList.get(mineralMix));
+
         if (getStringWidth() > 115) {
             minecraft.fontRenderer.drawString(minecraft.fontRenderer.trimStringToWidth(
                     BaseHEIUtil.formatString(mineralMix.name), 109).concat("..."), 8, 9, 15658734);

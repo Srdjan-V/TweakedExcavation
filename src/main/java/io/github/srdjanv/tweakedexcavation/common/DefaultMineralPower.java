@@ -14,8 +14,8 @@ public class DefaultMineralPower {
     }
     private DefaultMineralPower() {
         powerTier = PowerTierHandler.registerPowerTier(
-                Configs.TPConfig.DefaultExcavatorPowerTiers.capacity,
-                Configs.TPConfig.DefaultExcavatorPowerTiers.rft
+                Configs.TEConfig.DefaultExcavatorPowerTiers.capacity,
+                Configs.TEConfig.DefaultExcavatorPowerTiers.rft
         );
     }
 
