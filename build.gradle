@@ -110,6 +110,7 @@ dependencies {
 
     //enables java 17 features on java 8
     annotationProcessor 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
+    annotationProcessor 'net.java.dev.jna:jna-platform:5.13.0'
     compileOnly 'com.github.bsideup.jabel:jabel-javac-plugin:1.0.0'
 
     if (project.use_assetmover.toBoolean()) {
@@ -149,13 +150,6 @@ localGitDependency {
             branch 'develop'
         }
     })
-}
-
-if (project.hasProperty("DCEVMJDK")) {
-    configure([tasks.runClient, tasks.runServer]) {
-        getJavaLauncher().set(javaToolchains.launcherFor({}))
-        setExecutable(project.property("DCEVMJDK"))
-    }
 }
 
 def mixinConfigRefMap = 'mixins.' + project.archives_base_name + '.refmap.json'
