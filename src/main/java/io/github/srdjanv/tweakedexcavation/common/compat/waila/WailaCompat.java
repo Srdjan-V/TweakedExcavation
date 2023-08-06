@@ -40,8 +40,6 @@ public class WailaCompat {
     private static final String CURRENT_RFPOWER = "current_rfpower";
 
     public static void init() {
-        if (!Constants.isWailaLoaded()) return;
-
         WallaOverwriteManager manager = WallaOverwriteManager.getInstance();
         manager.registerBodyOverwrite(TileEntityExcavator.class, WailaCompat::getWailaBody);
         manager.registerNBTDataOverwrite(TileEntityExcavator.class, WailaCompat::getNBTData);

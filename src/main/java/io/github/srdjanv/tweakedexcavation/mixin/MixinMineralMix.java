@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 @Mixin(value = ExcavatorHandler.MineralMix.class, remap = false)
-public class MixinMineralMix implements IMineralMix {
+public class MixinMineralMix {
 
     @Shadow
     public String name;
@@ -45,32 +45,6 @@ public class MixinMineralMix implements IMineralMix {
     public int[] dimensionBlacklist;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    @Unique
-    int powerTier;
-
-    @Override
-    public int getPowerTier() {
-        return powerTier;
-    }
-
-    @Override
-    public void setPowerTier(int powerTier) {
-        this.powerTier = powerTier;
-    }
-
-    @Unique
-    int yield = ExcavatorHandler.mineralVeinCapacity;
-
-    @Override
-    public int getYield() {
-        return yield;
-    }
-
-    @Override
-    public void setYield(int yield) {
-        this.yield = yield;
-    }
 
     /**
      * @author Srki_2K
@@ -141,35 +115,6 @@ public class MixinMineralMix implements IMineralMix {
         }
 
         return true;
-    }
-
-    @Inject(method = "readFromNBT", at = @At("RETURN"))
-    private static void onReadFromNBT(NBTTagCompound nbt, CallbackInfoReturnable<ExcavatorHandler.MineralMix> cir) {
-        IMineralMix mineral = (IMineralMix) cir.getReturnValue();
-
-        mineral.setPowerTier(nbt.getInteger("powerTier"));
-        mineral.setYield(nbt.getInteger("yield"));
-    }
-
-    @Inject(method = "writeToNBT", at = @At("RETURN"))
-    public void onWriteToNBT(CallbackInfoReturnable<NBTTagCompound> cir) {
-        NBTTagCompound tag = cir.getReturnValue();
-        tag.setInteger("powerTier", this.powerTier);
-        tag.setInteger("yield", this.yield);
-    }
-
-    //Equals and hashCode methods
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MixinMineralMix that = (MixinMineralMix) o;
-        return name.equals(that.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name);
     }
 
 }

@@ -1,6 +1,7 @@
 package io.github.srdjanv.tweakedexcavation;
 
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
+import io.github.srdjanv.tweakedexcavation.common.compat.CompatHook;
 import io.github.srdjanv.tweakedexcavation.common.compat.top.TopCompat;
 import io.github.srdjanv.tweakedexcavation.common.compat.waila.WailaCompat;
 import io.github.srdjanv.tweakedexcavation.util.TweakedExcavationErrorLogging;
@@ -8,6 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -19,7 +21,8 @@ import org.apache.logging.log4j.Logger;
         version = TweakedExcavation.VERSION,
         name = "Tweaked Excavation",
         dependencies = "required-after:crafttweaker;" +
-                "required-after:tweakedlib@[" + Tags.TWEAKED_LIB_VERSION + ",)")
+                "required-after:tweakedlib@[" + Tags.TWEAKED_LIB_VERSION + ",);" +
+                "after:groovyscript@[" + Tags.GROOVY_SCRIPT_VERSION + ",)")
 public class TweakedExcavation {
 
     public static final String MODID = "tweakedexcavation";
@@ -35,6 +38,11 @@ public class TweakedExcavation {
     }
 
     @Mod.EventHandler
+    public void construction(FMLConstructionEvent event) {
+        CompatHook.init();
+    }
+
+    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -42,8 +50,6 @@ public class TweakedExcavation {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         TweakedExcavationErrorLogging.register();
-        TopCompat.init();
-        WailaCompat.init();
     }
 
     @Mod.EventHandler

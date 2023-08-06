@@ -45,6 +45,7 @@ minecraft {
     useDependencyAccessTransformers = true
     injectedTags.put("VERSION", project.version)
     injectedTags.put("TWEAKED_LIB_VERSION", tweaked_lib_version)
+    injectedTags.put("GROOVY_SCRIPT_VERSION", project.groovy_script_version)
 }
 
 // Generate a my.project.Tags class with the version number as a field
@@ -77,6 +78,13 @@ repositories {
             includeGroup "blusunrize"
         }
     }
+    ivy {
+        url 'https://github.com/'
+        patternLayout {
+            artifact '[organisation]/[module]/releases/download/v[revision]/[module]-[revision]-[classifier].[ext]'
+        }
+        metadataSources { artifact() }
+    }
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
@@ -87,15 +95,20 @@ repositories {
 configurations {
     embed
     implementation.extendsFrom(embed)
+    source
 }
 
 dependencies {
+    compileOnly 'org.jetbrains:annotations:24.0.1'
     implementation "curse.maven:hwyla-253449:2568751-sources-2568752-api-2568753"
     //compileOnly "curse.maven:hwyla-253449:2568751-sources-2568752-api-2568753"
     //implementation "curse.maven:top-245211:2667280"
     implementation "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17"
 
     implementation 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.679'
+    implementation "CleanroomMC:GroovyScript:${project.groovy_script_version}:dev@jar"
+    source "CleanroomMC:GroovyScript:${project.groovy_script_version}:sources@jar"
+
     runtimeOnly rfg.deobf('curse.maven:ImmersivePetroleum-268250:3382321')
     implementation rfg.deobf('curse.maven:ImmersiveEngineering-231951:2974106')
     //implementation 'blusunrize:ImmersiveEngineering:0.12-92-559'

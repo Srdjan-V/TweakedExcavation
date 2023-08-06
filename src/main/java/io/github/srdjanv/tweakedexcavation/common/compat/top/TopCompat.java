@@ -25,8 +25,6 @@ import static io.github.srdjanv.tweakedlib.api.hei.BaseHEIUtil.translateToLocalF
 public class TopCompat {
 
     public static void init() {
-        if (!Constants.isTheOneProbeLoaded()) return;
-
         TopOverwriteManager manager = TopOverwriteManager.getInstance();
         manager.registerOverwrite(TileEntityExcavator.class, TopCompat::addProbeInfo);
     }
