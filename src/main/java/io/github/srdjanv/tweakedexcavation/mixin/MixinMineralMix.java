@@ -3,22 +3,15 @@ package io.github.srdjanv.tweakedexcavation.mixin;
 import blusunrize.immersiveengineering.api.ApiUtils;
 import blusunrize.immersiveengineering.api.IEApi;
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
+import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
-import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 @Mixin(value = ExcavatorHandler.MineralMix.class, remap = false)
 public class MixinMineralMix {

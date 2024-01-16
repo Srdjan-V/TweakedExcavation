@@ -2,6 +2,7 @@ package io.github.srdjanv.tweakedexcavation.util;
 
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.common.Configs;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.logging.log4j.Logger;
 import io.github.srdjanv.tweakedexcavation.TweakedExcavation;
 import io.github.srdjanv.tweakedlib.api.logging.errorlogginglib.ErrorLoggingLib;
@@ -21,7 +22,7 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
     private TweakedExcavationErrorLogging() {
     }
 
-    List<String> errors = new ArrayList<>();
+    private final List<String> errors = new ObjectArrayList<>(0);
 
     @Override
     public boolean startupChecks() {

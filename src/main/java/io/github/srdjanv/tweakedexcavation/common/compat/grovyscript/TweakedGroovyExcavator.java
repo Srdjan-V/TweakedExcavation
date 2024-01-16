@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExcavator.GroovyMineralWrapper> {
 

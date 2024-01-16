@@ -2,8 +2,6 @@ package io.github.srdjanv.tweakedexcavation;
 
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
 import io.github.srdjanv.tweakedexcavation.common.compat.CompatHook;
-import io.github.srdjanv.tweakedexcavation.common.compat.top.TopCompat;
-import io.github.srdjanv.tweakedexcavation.common.compat.waila.WailaCompat;
 import io.github.srdjanv.tweakedexcavation.util.TweakedExcavationErrorLogging;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigManager;

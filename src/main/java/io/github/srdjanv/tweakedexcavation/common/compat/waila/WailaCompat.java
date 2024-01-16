@@ -8,7 +8,6 @@ import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralWorldInfo;
 import io.github.srdjanv.tweakedlib.api.hei.BaseHEIUtil;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTierHandler;
 import io.github.srdjanv.tweakedlib.api.waila.WallaOverwriteManager;
-import io.github.srdjanv.tweakedlib.common.Constants;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -36,7 +35,6 @@ public class WailaCompat {
     private static final String YIELD = "yield";
     private static final String POWER_TIER = "power_tier";
     private static final String POWER_CAPACITY = "power_capacity";
-    private static final String POWER_USAGE = "power_usage";
     private static final String CURRENT_RFPOWER = "current_rfpower";
 
     public static void init() {
@@ -62,13 +60,9 @@ public class WailaCompat {
                 default -> {
                     toolTip.add(translateToLocalFormatted("tweakedexcavation.hud.name", tweakedExTag.getString(NAME)));
                     toolTip.add(" §7" + translateToLocalFormatted("tweakedexcavation.hud.yield", tweakedExTag.getInteger(YIELD)));
-
-                    toolTip.add("");
-
-                    toolTip.add(translateToLocalFormatted("tweakedlib.jei.power_tier", BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(POWER_TIER))));
-                    toolTip.add(" §7" + translateToLocalFormatted("tweakedlib.jei.power_capacity", BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(POWER_CAPACITY))));
-                    toolTip.add(" §7" + translateToLocalFormatted("tweakedlib.jei.power_usage", BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(POWER_USAGE))));
-                    toolTip.add(" §7" + translateToLocalFormatted("tweakedlib.hud.current_power", BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(CURRENT_RFPOWER))));
+                    toolTip.add(translateToLocalFormatted("tweakedlib.hud.power_tier", BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(POWER_TIER))));
+                    toolTip.add("§7" + BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(CURRENT_RFPOWER)) +
+                            "/" + BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(POWER_CAPACITY)) + " RF");
                 }
             }
 
@@ -95,6 +89,13 @@ public class WailaCompat {
         }
 
         IMineralMix iMineralMix = (IMineralMix) info.getType();
+        if (iMineralMix == null) {
+            if (master.energyStorage.getEnergyStored() != 0) {
+                tweakedExTag.setString(statusKey, statusEmpty);
+            } else tweakedExTag.setString(statusKey, statusUnknown);
+            return tag;
+        }
+
         if (info.getDepletion() == iMineralMix.getYield()) {
             tweakedExTag.setString(statusKey, statusUnknown);
             return tag;
@@ -105,11 +106,9 @@ public class WailaCompat {
         tweakedExTag.setString(NAME, orgMineral.name);
         tweakedExTag.setInteger(YIELD, 1 + mineral.getYield() - info.getDepletion());
 
-        var powerTier = PowerTierHandler.getPowerTier(mineral.getPowerTier());
         tweakedExTag.setInteger(POWER_TIER, PowerTierHandler.getTierOfSpecifiedPowerTier(mineral.getPowerTier()));
-        tweakedExTag.setInteger(POWER_CAPACITY, powerTier.getCapacity());
-        tweakedExTag.setInteger(POWER_USAGE, powerTier.getRft());
-        tweakedExTag.setInteger(CURRENT_RFPOWER, ((IFluxReceiver) te).getEnergyStored(null));
+        tweakedExTag.setInteger(POWER_CAPACITY, master.energyStorage.getMaxEnergyStored());
+        tweakedExTag.setInteger(CURRENT_RFPOWER, master.energyStorage.getEnergyStored());
 
         return tag;
     }
