@@ -3,11 +3,14 @@ package io.github.srdjanv.tweakedexcavation.common.compat.waila;
 import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxReceiver;
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import blusunrize.immersiveengineering.common.blocks.metal.TileEntityExcavator;
+import io.github.srdjanv.tweakedexcavation.TweakedExcavation;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralWorldInfo;
 import io.github.srdjanv.tweakedlib.api.hei.BaseHEIUtil;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTierHandler;
 import io.github.srdjanv.tweakedlib.api.waila.WallaOverwriteManager;
+import io.github.srdjanv.tweakedlib.common.Constants;
+import io.github.srdjanv.tweakedlib.integration.IInitializer;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -16,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,7 +27,7 @@ import java.util.List;
 
 import static io.github.srdjanv.tweakedlib.api.hei.BaseHEIUtil.translateToLocalFormatted;
 
-public class WailaCompat {
+public class WailaCompat implements IInitializer {
     private static final String nbtTag = "tweakedExTag";
 
     private static final String statusKey = "status";
@@ -37,7 +41,16 @@ public class WailaCompat {
     private static final String POWER_CAPACITY = "power_capacity";
     private static final String CURRENT_RFPOWER = "current_rfpower";
 
-    public static void init() {
+    @Override public String getModID() {
+        return TweakedExcavation.MODID;
+    }
+
+    @Override public boolean shouldRun() {
+        return Constants.isWailaLoaded();
+    }
+
+    @Override
+    public void init(FMLInitializationEvent event) {
         WallaOverwriteManager manager = WallaOverwriteManager.getInstance();
         manager.registerBodyOverwrite(TileEntityExcavator.class, WailaCompat::getWailaBody);
         manager.registerNBTDataOverwrite(TileEntityExcavator.class, WailaCompat::getNBTData);

@@ -15,13 +15,6 @@ import java.util.List;
 import static blusunrize.immersiveengineering.api.tool.ExcavatorHandler.mineralList;
 
 public final class TweakedExcavationErrorLogging implements ICustomLogger {
-    public static void register() {
-        ErrorLoggingLib.addCustomLogger(new TweakedExcavationErrorLogging());
-    }
-
-    private TweakedExcavationErrorLogging() {
-    }
-
     private final List<String> errors = new ObjectArrayList<>(0);
 
     @Override

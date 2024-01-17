@@ -1,15 +1,14 @@
 package io.github.srdjanv.tweakedexcavation;
 
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
-import io.github.srdjanv.tweakedexcavation.common.compat.CompatHook;
-import io.github.srdjanv.tweakedexcavation.util.TweakedExcavationErrorLogging;
+import io.github.srdjanv.tweakedlib.integration.DiscoveryHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.event.FMLConstructionEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.LogManager;
@@ -36,18 +35,19 @@ public class TweakedExcavation {
     }
 
     @Mod.EventHandler
-    public void construction(FMLConstructionEvent event) {
-        CompatHook.init();
-    }
-
-    @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(this);
+        DiscoveryHandler.getInstance().preInit(MODID, event);
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        TweakedExcavationErrorLogging.register();
+        DiscoveryHandler.getInstance().init(MODID, event);
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        DiscoveryHandler.getInstance().postInit(MODID, event);
     }
 
     @Mod.EventHandler

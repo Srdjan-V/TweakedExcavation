@@ -78,13 +78,6 @@ repositories {
             includeGroup "blusunrize"
         }
     }
-    ivy {
-        url 'https://github.com/'
-        patternLayout {
-            artifact '[organisation]/[module]/releases/download/v[revision]/[module]-[revision]-[classifier].[ext]'
-        }
-        metadataSources { artifact() }
-    }
     maven {
         // location of the maven that hosts JEI files
         name = "Progwml6 maven"
@@ -95,7 +88,6 @@ repositories {
 configurations {
     embed
     implementation.extendsFrom(embed)
-    source
 }
 
 dependencies {
@@ -106,8 +98,7 @@ dependencies {
     implementation "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17"
 
     implementation 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.679'
-    implementation "CleanroomMC:GroovyScript:${project.groovy_script_version}:dev@jar"
-    source "CleanroomMC:GroovyScript:${project.groovy_script_version}:sources@jar"
+    implementation "com.cleanroommc:groovyscript:${project.groovy_script_version}"
 
     runtimeOnly rfg.deobf('curse.maven:ImmersivePetroleum-268250:3382321')
     implementation rfg.deobf('curse.maven:ImmersiveEngineering-231951:2974106')

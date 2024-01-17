@@ -6,21 +6,39 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
+import io.github.srdjanv.tweakedexcavation.TweakedExcavation;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMixGetters;
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
+import io.github.srdjanv.tweakedlib.TweakedLib;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTier;
+import io.github.srdjanv.tweakedlib.common.Constants;
+import io.github.srdjanv.tweakedlib.common.compat.groovyscript.GroovyScriptRegistry;
+import io.github.srdjanv.tweakedlib.integration.IInitializer;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExcavator.GroovyMineralWrapper> {
+public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExcavator.GroovyMineralWrapper> implements IInitializer {
+
+    @Override public String getModID() {
+        return TweakedExcavation.MODID;
+    }
+
+    @Override public boolean shouldRun() {
+        return Constants.isGroovyScriptLoaded();
+    }
+
+    @Override public void preInit(FMLPreInitializationEvent event) {
+        GroovyScriptRegistry.getRegistry().addRegistry(new TweakedGroovyExcavator());
+    }
 
     @GroovyBlacklist
-    public TweakedGroovyExcavator() {
-        super("Excavator", "excavator", "Mineral", "mineral");
+    protected TweakedGroovyExcavator() {
+        super(Arrays.asList("Excavator", "excavator", "Mineral", "mineral"));
     }
 
     @Override
