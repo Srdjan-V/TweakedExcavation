@@ -1,6 +1,5 @@
 package io.github.srdjanv.tweakedexcavation.common.compat.waila;
 
-import blusunrize.immersiveengineering.api.energy.immersiveflux.IFluxReceiver;
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import blusunrize.immersiveengineering.common.blocks.metal.TileEntityExcavator;
 import io.github.srdjanv.tweakedexcavation.TweakedExcavation;
@@ -10,7 +9,7 @@ import io.github.srdjanv.tweakedlib.api.hei.BaseHEIUtil;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTierHandler;
 import io.github.srdjanv.tweakedlib.api.waila.WallaOverwriteManager;
 import io.github.srdjanv.tweakedlib.common.Constants;
-import io.github.srdjanv.tweakedlib.integration.IInitializer;
+import io.github.srdjanv.tweakedlib.api.integration.IInitializer;
 import mcp.mobius.waila.api.IWailaConfigHandler;
 import mcp.mobius.waila.api.IWailaDataAccessor;
 import net.minecraft.entity.player.EntityPlayerMP;

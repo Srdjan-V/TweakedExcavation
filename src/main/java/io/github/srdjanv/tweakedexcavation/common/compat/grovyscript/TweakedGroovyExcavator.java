@@ -6,38 +6,19 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
-import io.github.srdjanv.tweakedexcavation.TweakedExcavation;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMixGetters;
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
-import io.github.srdjanv.tweakedlib.TweakedLib;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTier;
-import io.github.srdjanv.tweakedlib.common.Constants;
-import io.github.srdjanv.tweakedlib.common.compat.groovyscript.GroovyScriptRegistry;
-import io.github.srdjanv.tweakedlib.integration.IInitializer;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExcavator.GroovyMineralWrapper> implements IInitializer {
+public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExcavator.GroovyMineralWrapper> {
 
-    @Override public String getModID() {
-        return TweakedExcavation.MODID;
-    }
-
-    @Override public boolean shouldRun() {
-        return Constants.isGroovyScriptLoaded();
-    }
-
-    @Override public void preInit(FMLPreInitializationEvent event) {
-        GroovyScriptRegistry.getRegistry().addRegistry(new TweakedGroovyExcavator());
-    }
-
-    @GroovyBlacklist
-    protected TweakedGroovyExcavator() {
+    @GroovyBlacklist TweakedGroovyExcavator() {
         super(Arrays.asList("Excavator", "excavator", "Mineral", "mineral"));
     }
 
@@ -46,31 +27,6 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
     public void onReload() {
         removeScripted().forEach((recipe) -> ExcavatorHandler.mineralList.remove(recipe.getMineralMix()));
         restoreFromBackup().forEach((recipe) -> ExcavatorHandler.mineralList.put(recipe.getMineralMix(), recipe.getWeight()));
-    }
-
-    @Override
-    @GroovyBlacklist
-    protected void initBackup() {
-        this.backup = new HashSet<>();
-    }
-
-    @Override
-    @GroovyBlacklist
-    protected void initScripted() {
-        this.scripted = new HashSet<>();
-    }
-
-    @Override
-    @GroovyBlacklist
-    public void addBackup(GroovyMineralWrapper recipe) {
-        if (scripted.contains(recipe) || backup.contains(recipe)) return;
-        backup.add(recipe);
-    }
-
-    @Override
-    @GroovyBlacklist
-    protected boolean compareRecipe(GroovyMineralWrapper recipe, GroovyMineralWrapper recipe2) {
-        return recipe.equals(recipe2);
     }
 
     @Override
@@ -86,19 +42,8 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
     }
 
     public void remove(String name) {
-        ExcavatorHandler.MineralMix removedMineral = null;
-        for (Map.Entry<ExcavatorHandler.MineralMix, Integer> mineral : ExcavatorHandler.mineralList.entrySet()) {
-            if (mineral.getKey().name.equalsIgnoreCase(name)) {
-                addBackup(new GroovyMineralWrapper(mineral.getKey(), mineral.getValue()));
-                removedMineral = mineral.getKey();
-                break;
-            }
-        }
-
-        if (removedMineral != null) {
-            ExcavatorHandler.mineralList.remove(removedMineral);
-        } else GroovyLog.msg("Error removing custom mineral with name: {}", name)
-                .add("No minerals with that name exist").error().post();
+        GroovyMineralWrapper mineralWrapper = get(name);
+        remove(mineralWrapper);
     }
 
     public boolean remove(GroovyMineralWrapper mineral) {
@@ -134,13 +79,11 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
 
     public void add(GroovyMineralWrapper mineral) {
         if (mineral != null) {
-            if (ExcavatorHandler.mineralList.containsKey(mineral.getMineralMix())) {
-                addBackup(get(mineral.getName()));
-                ExcavatorHandler.mineralList.remove(mineral.getMineralMix());
-                GroovyLog.msg("Updating mineral with name: {}", mineral.getName()).info().post();
-            }
-            ExcavatorHandler.mineralList.put(mineral.getMineralMix(), mineral.getWeight());
-            scripted.add(mineral);
+            if (!ExcavatorHandler.mineralList.containsKey(mineral.getMineralMix())) {
+                addScripted(mineral);
+                ExcavatorHandler.mineralList.put(mineral.getMineralMix(), mineral.getWeight());
+                GroovyLog.msg("Added mineral {}", mineral.getName()).info().post();
+            } else GroovyLog.msg("Mineral {}, is already registered remove it first", mineral.getName()).error().post();
         } else GroovyLog.msg("Mineral to add is null").error().post();
     }
 
@@ -321,6 +264,8 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
         }
 
         public MineralBuilder toBuilder() {
+            remove(this);
+
             var builder = recipeBuilder();
             builder.name(mineralMix.getName());
             builder.weight(weight);

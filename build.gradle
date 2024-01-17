@@ -98,7 +98,11 @@ dependencies {
     implementation "mcjty.theoneprobe:TheOneProbe-1.12:1.12-1.4.28-17"
 
     implementation 'CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.1.20.679'
-    implementation "com.cleanroommc:groovyscript:${project.groovy_script_version}"
+    implementation ("com.cleanroommc:groovyscript:${project.groovy_script_version}") {
+        exclude group: 'mezz.jei', module: 'jei_1.12.2'
+        exclude group: 'curse.maven', module: 'top-245211'
+        exclude group: 'zone.rong', module: 'mixinbooter'
+    }
 
     runtimeOnly rfg.deobf('curse.maven:ImmersivePetroleum-268250:3382321')
     implementation rfg.deobf('curse.maven:ImmersiveEngineering-231951:2974106')

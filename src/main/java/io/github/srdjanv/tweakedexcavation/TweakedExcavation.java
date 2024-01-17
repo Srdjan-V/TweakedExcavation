@@ -1,7 +1,7 @@
 package io.github.srdjanv.tweakedexcavation;
 
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
-import io.github.srdjanv.tweakedlib.integration.DiscoveryHandler;
+import io.github.srdjanv.tweakedlib.api.integration.DiscoveryHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
