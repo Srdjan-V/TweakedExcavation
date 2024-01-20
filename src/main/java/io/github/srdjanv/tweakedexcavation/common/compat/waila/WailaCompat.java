@@ -5,6 +5,7 @@ import blusunrize.immersiveengineering.common.blocks.metal.TileEntityExcavator;
 import io.github.srdjanv.tweakedexcavation.TweakedExcavation;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralWorldInfo;
+import io.github.srdjanv.tweakedexcavation.util.TweakedExcavationInitializer;
 import io.github.srdjanv.tweakedlib.api.hei.BaseHEIUtil;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTierHandler;
 import io.github.srdjanv.tweakedlib.api.waila.WallaOverwriteManager;
@@ -26,7 +27,7 @@ import java.util.List;
 
 import static io.github.srdjanv.tweakedlib.api.hei.BaseHEIUtil.translateToLocalFormatted;
 
-public class WailaCompat implements IInitializer {
+public class WailaCompat implements TweakedExcavationInitializer {
     private static final String nbtTag = "tweakedExTag";
 
     private static final String statusKey = "status";
