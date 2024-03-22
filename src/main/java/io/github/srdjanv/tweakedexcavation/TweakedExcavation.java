@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = TweakedExcavation.MODID,
         version = TweakedExcavation.VERSION,
         name = "Tweaked Excavation",
-        dependencies = "required-after:crafttweaker;" +
+        dependencies = "after:crafttweaker;" +
                 "required-after:tweakedlib@[" + Tags.TWEAKED_LIB_VERSION + ",);" +
                 "after:groovyscript@[" + Tags.GROOVY_SCRIPT_VERSION + ",)")
 public class TweakedExcavation {
