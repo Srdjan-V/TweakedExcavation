@@ -1,9 +1,10 @@
 tweakedexcavation.jei.mineral.chance= §7Chance: %d
 tweakedexcavation.jei.mineral.average= §7Average Mineral yield: %d
-tweakedexcavation.jei.mineral.average.Infinite= §7Average Mineral yield: Infinite
+tweakedexcavation.jei.mineral.average.infinite= §7Average Mineral yield: Infinite
 tweakedexcavation.jei.mineral.weight=Mineral Spawn Weight %d
 
-tweakedexcavation.hud.yield=Mineral yield: %d
+tweakedexcavation.hud.yield=Mineral yield
 tweakedexcavation.hud.name=Mineral name: %s
 tweakedexcavation.hud.unknown=Unknown Mineral
 tweakedexcavation.hud.depleated=Depleted Mineral
+tweakedexcavation.hud.empty=Empty mineral vain

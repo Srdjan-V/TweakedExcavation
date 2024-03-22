@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import static io.github.srdjanv.tweakedlib.api.hei.BaseHEIUtil.translateToLocal;
 import static io.github.srdjanv.tweakedlib.api.hei.BaseHEIUtil.translateToLocalFormatted;
 
 public class WailaCompat implements TweakedExcavationInitializer {
@@ -68,11 +69,11 @@ public class WailaCompat implements TweakedExcavationInitializer {
                     toolTip.add(translateToLocalFormatted("tweakedexcavation.hud.empty"));
                 }
                 case statusInf -> {
-                    BaseHEIUtil.translateToLocal("tweakedexcavation.jei.mineral.average.Infinite");
+                    BaseHEIUtil.translateToLocal("tweakedexcavation.jei.mineral.average.infinite");
                 }
                 default -> {
                     toolTip.add(translateToLocalFormatted("tweakedexcavation.hud.name", tweakedExTag.getString(NAME)));
-                    toolTip.add(" §7" + translateToLocalFormatted("tweakedexcavation.hud.yield", tweakedExTag.getInteger(YIELD)));
+                    toolTip.add(" §7" + translateToLocalFormatted("tweakedexcavation.hud.yield") + ": " + tweakedExTag.getInteger(YIELD));
                     toolTip.add(translateToLocalFormatted("tweakedlib.hud.power_tier", BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(POWER_TIER))));
                     toolTip.add("§7" + BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(CURRENT_RFPOWER)) +
                             "/" + BaseHEIUtil.numberFormat.format(tweakedExTag.getInteger(POWER_CAPACITY)) + " RF");
@@ -103,23 +104,22 @@ public class WailaCompat implements TweakedExcavationInitializer {
 
         IMineralMix iMineralMix = (IMineralMix) info.getType();
         if (iMineralMix == null) {
-            if (master.energyStorage.getEnergyStored() != 0) {
-                tweakedExTag.setString(statusKey, statusEmpty);
-            } else tweakedExTag.setString(statusKey, statusUnknown);
+            tweakedExTag.setString(statusKey, statusEmpty);
             return tag;
         }
 
-        if (info.getDepletion() == iMineralMix.getYield()) {
-            tweakedExTag.setString(statusKey, statusUnknown);
-            return tag;
+        ret:
+        {
+            if (info.getDepletion() == iMineralMix.getYield()) {
+                tweakedExTag.setString(statusKey, statusUnknown);
+                break ret;
+            }
+
+            tweakedExTag.setString(NAME, iMineralMix.getName());
+            tweakedExTag.setInteger(YIELD, Math.min(1 + (iMineralMix.getYield() - info.getDepletion()), iMineralMix.getYield()));
         }
 
-        var orgMineral = info.getType();
-        IMineralMix mineral = (IMineralMix) orgMineral;
-        tweakedExTag.setString(NAME, orgMineral.name);
-        tweakedExTag.setInteger(YIELD, 1 + mineral.getYield() - info.getDepletion());
-
-        tweakedExTag.setInteger(POWER_TIER, PowerTierHandler.getTierOfSpecifiedPowerTier(mineral.getPowerTier()));
+        tweakedExTag.setInteger(POWER_TIER, PowerTierHandler.getTierOfSpecifiedPowerTier(iMineralMix.getPowerTier()));
         tweakedExTag.setInteger(POWER_CAPACITY, master.energyStorage.getMaxEnergyStored());
         tweakedExTag.setInteger(CURRENT_RFPOWER, master.energyStorage.getEnergyStored());
 

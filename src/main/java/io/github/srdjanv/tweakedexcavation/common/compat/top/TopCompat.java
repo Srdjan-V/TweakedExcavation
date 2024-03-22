@@ -42,23 +42,33 @@ public class TopCompat implements TweakedExcavationInitializer {
         TileEntityExcavator master = ((TileEntityExcavator) te).master();
         if (master == null) return;
         var info = (IMineralWorldInfo) ExcavatorHandler.getMineralWorldInfo(master.getWorld(), master.getPos().getX() >> 4, master.getPos().getZ() >> 4);
-        if (info == null) {
-            probeInfo.text(translateToLocalFormatted("tweakedexcavation.hud.empty"));
-            return;
+
+            if (info == null) {
+                probeInfo.text(translateToLocalFormatted("tweakedexcavation.hud.empty"));
+                return;
+            }
+
+            IMineralMix iMineralMix = (IMineralMix) info.getType();
+            if (iMineralMix == null) {
+                probeInfo.text(translateToLocalFormatted("tweakedexcavation.hud.empty"));
+                return;
+            }
+
+        ret:{
+            if (info.getDepletion() == iMineralMix.getYield()) {
+                probeInfo.text(translateToLocalFormatted("tweakedexcavation.hud.unknown"));
+                break ret;
+            }
+
+            probeInfo.text(translateToLocalFormatted("tweakedexcavation.hud.name", BaseHEIUtil.formatString(((ExcavatorHandler.MineralMix) iMineralMix).name)));
+            if (iMineralMix.getYield() < 0) {
+                probeInfo.text(translateToLocal("tweakedexcavation.jei.mineral.average.Infinite"));
+            } else {
+                probeInfo.text(translateToLocalFormatted("tweakedexcavation.hud.yield"));
+                probeInfo.progress(Math.min(1 + (iMineralMix.getYield() - info.getDepletion()), iMineralMix.getYield()), iMineralMix.getYield());
+            }
         }
 
-        IMineralMix iMineralMix = (IMineralMix) info.getType();
-        if (info.getDepletion() == iMineralMix.getYield()) {
-            probeInfo.text(translateToLocalFormatted("tweakedexcavation.hud.unknown"));
-            return;
-        }
-
-        probeInfo.text(translateToLocalFormatted("tweakedexcavation.hud.name", BaseHEIUtil.formatString(((ExcavatorHandler.MineralMix) iMineralMix).name)));
-        if (iMineralMix.getYield() < 0) {
-            probeInfo.text(translateToLocal("tweakedexcavation.jei.mineral.average.Infinite"));
-            return;
-        } else
-            probeInfo.text(" §7" + translateToLocalFormatted("tweakedexcavation.hud.yield", String.valueOf(1 + iMineralMix.getYield() - info.getDepletion())));
         probeInfo.text("");
 
         var powerTier = PowerTierHandler.getPowerTier(iMineralMix.getPowerTier());
