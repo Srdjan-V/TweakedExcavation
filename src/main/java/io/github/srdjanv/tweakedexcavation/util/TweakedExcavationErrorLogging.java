@@ -45,17 +45,6 @@ public final class TweakedExcavationErrorLogging implements ICustomLogger {
     }
 
     @Override
-    public String[] getConfigs() {
-        String[] strings = new String[3];
-
-        strings[0] = "Default Excavator Power Tiers:";
-        strings[1] = "Default capacity: " + Configs.TEConfig.DefaultExcavatorPowerTiers.capacity;
-        strings[2] = "Default consumption: " + Configs.TEConfig.DefaultExcavatorPowerTiers.rft;
-
-        return strings;
-    }
-
-    @Override
     public List<String> getErrors() {
         return errors;
     }

@@ -23,7 +23,7 @@ public class ExcavatorCategory implements IRecipeCategory<ExcavatorWrapper> {
 
     @Override
     public String getTitle() {
-        return Translator.translateToLocal("tile.immersiveengineering.metal_multiblock.excavator.name");
+        return BaseHEIUtil.translateToLocal("tile.immersiveengineering.metal_multiblock.excavator.name");
     }
 
     @Override

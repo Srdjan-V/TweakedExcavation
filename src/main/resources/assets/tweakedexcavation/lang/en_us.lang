@@ -1,10 +1,12 @@
-tweakedexcavation.jei.mineral.chance= §7Chance: %d
-tweakedexcavation.jei.mineral.average= §7Average Mineral yield: %d
-tweakedexcavation.jei.mineral.average.infinite= §7Average Mineral yield: Infinite
-tweakedexcavation.jei.mineral.weight=Mineral Spawn Weight %d
+tweakedexcavation.jei.mineral.chance=Chance:
+tweakedexcavation.jei.mineral.average=Average Mineral yield:
+tweakedexcavation.jei.mineral.average.infinite=Average Mineral yield: Infinite
+tweakedexcavation.jei.mineral.weight=Mineral Spawn Weight:
 
-tweakedexcavation.hud.yield=Mineral yield
-tweakedexcavation.hud.name=Mineral name: %s
-tweakedexcavation.hud.unknown=Unknown Mineral
-tweakedexcavation.hud.depleated=Depleted Mineral
-tweakedexcavation.hud.empty=Empty mineral vain
+tweakedexcavation.hud.mineral.yield=Mineral yield
+tweakedexcavation.hud.mineral.name=Mineral name:
+tweakedexcavation.hud.mineral.unknown=Unknown Mineral
+tweakedexcavation.hud.mineral.depleated=Depleted Mineral
+tweakedexcavation.hud.mineral.empty=Empty mineral vain
+tweakedexcavation.hud.mineral.req_power=The Excavator requires power
+tweakedexcavation.hud.mineral.missing_wheel=The Excavator is missing the wheel

@@ -3,6 +3,7 @@ package io.github.srdjanv.tweakedexcavation.client.hei;
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.common.Configs;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import mezz.jei.api.gui.ITooltipCallback;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -40,7 +41,7 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     @SuppressWarnings("NullableProblems")
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
         if (mouseY > 6 && mouseX > 6 && mouseY < 17 && mouseX < getStringWidth()) {
-            List<String> list = new ArrayList<>();
+            List<String> list = new ObjectArrayList<>();
             list.add(BaseHEIUtil.formatString(mineralMix.name));
 
             return list;
@@ -48,16 +49,16 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
 
         if (mouseY > 8 && mouseY < 22) {
             if (mouseX > 124 && mouseX < 135) {
-                List<String> list = new ArrayList<>();
+                List<String> list = new ObjectArrayList<>();
                 BaseHEIUtil.powerTierListData(list, ((IMineralMix) mineralMix).getPowerTier());
 
                 return list;
             }
 
             if (mouseX > 138 && mouseX < 151) {
-                List<String> list = new ArrayList<>();
+                List<String> list = new ObjectArrayList<>();
 
-                list.add(BaseHEIUtil.translateToLocalFormatted("tweakedexcavation.jei.mineral.weight", mineralList.get(mineralMix)));
+                list.add(BaseHEIUtil.translateToLocal("tweakedexcavation.jei.mineral.weight") +" " + mineralList.get(mineralMix));
                 list.add("");
 
                 BaseHEIUtil.dimensionListData(list, mineralMix.dimensionWhitelist, mineralMix.dimensionBlacklist);
@@ -88,8 +89,8 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
     public void onTooltip(int slotIndex, boolean input, ItemStack ingredient, List<String> tooltip) {
         tooltip.clear();
         tooltip.add(ingredient.getDisplayName());
-        tooltip.add(BaseHEIUtil.translateToLocalFormatted("tweakedexcavation.jei.mineral.chance",
-                BaseHEIUtil.percentFormat.format(mineralMix.recalculatedChances[slotIndex] * 100) + "%"));
+        tooltip.add(BaseHEIUtil.translateToLocal("tweakedexcavation.jei.mineral.chance") + " " +
+                BaseHEIUtil.percentFormat.format(mineralMix.recalculatedChances[slotIndex] * 100) + "%");
         depletion(tooltip, slotIndex);
     }
 
@@ -98,8 +99,8 @@ public class ExcavatorWrapper implements IRecipeWrapper, ITooltipCallback<ItemSt
             tooltip.add(BaseHEIUtil.translateToLocal("tweakedexcavation.jei.mineral.average.Infinite"));
             return;
         }
-        tooltip.add(BaseHEIUtil.translateToLocalFormatted("tweakedexcavation.jei.mineral.average",
-                BaseHEIUtil.numberFormat.format((int) (((IMineralMix) mineralMix).getYield() * mineralMix.recalculatedChances[slotIndex]))));
+        tooltip.add(BaseHEIUtil.translateToLocal("tweakedexcavation.jei.mineral.average") + " " +
+                BaseHEIUtil.numberFormat.format((int) (((IMineralMix) mineralMix).getYield() * mineralMix.recalculatedChances[slotIndex])));
     }
 
 }
