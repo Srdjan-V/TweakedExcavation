@@ -126,6 +126,10 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
             return this;
         }
 
+        public MineralBuilder ore(OreDictIngredient ore, BigDecimal chance) {
+            return ore(ore.getOreDict(), chance);
+        }
+
         /**
          * Ore input syntax: 'namespace:path:meta'. Meta is optional <p>
          * Examples: <p>
@@ -138,9 +142,15 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
             return this;
         }
 
-        public MineralBuilder ores(Map<String, BigDecimal> ores) {
-            for (var entry : ores.entrySet())
-                ore(entry.getKey(), entry.getValue());
+        public MineralBuilder ores(Map<Object, BigDecimal> ores) {
+            for (var entry : ores.entrySet()) {
+                var o =entry.getKey();
+                if (o instanceof String string) {
+                    ore(string, entry.getValue());
+                } else if (o instanceof OreDictIngredient ore) {
+                    ore(ore.getOreDict(), entry.getValue());
+                } else throw new IllegalArgumentException("Unknown ore type: " + o);
+            }
             return this;
         }
 
