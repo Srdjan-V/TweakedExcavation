@@ -23,7 +23,6 @@ public class GroovyMineralValidator {
 
         validateDimBlacklist(msg, name, dimBlacklist);
         validateDimWhitelist(msg, name, dimWhitelist);
-
     }
 
     public static void validateName(GroovyLog.Msg msg, String name) {
@@ -34,6 +33,9 @@ public class GroovyMineralValidator {
     public static void validateFailChance(GroovyLog.Msg msg, String name, float failChance) {
         msg.add(failChance < 0,
                 "Mineral({}): failChance can not be smaller then 0!", name);
+
+        msg.add(failChance > 1,
+                "Mineral({}): failChance can not be greater then 1!", name);
     }
 
     public static void validateOres(GroovyLog.Msg msg, String name, List<String> ores) {

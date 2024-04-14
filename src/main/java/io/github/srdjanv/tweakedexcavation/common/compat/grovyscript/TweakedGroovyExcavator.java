@@ -3,6 +3,7 @@ package io.github.srdjanv.tweakedexcavation.common.compat.grovyscript;
 import blusunrize.immersiveengineering.api.tool.ExcavatorHandler;
 import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
+import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
@@ -10,6 +11,7 @@ import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMixGetters;
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTier;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.item.ItemStack;
 
 import java.math.BigDecimal;
@@ -19,7 +21,7 @@ import java.util.stream.Collectors;
 public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExcavator.GroovyMineralWrapper> {
 
     @GroovyBlacklist TweakedGroovyExcavator() {
-        super(Arrays.asList("Excavator", "excavator", "Mineral", "mineral"));
+        super(Alias.generateOf("Excavator"));
     }
 
     @Override
@@ -92,10 +94,9 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
     }
 
     public class MineralBuilder implements IRecipeBuilder<GroovyMineralWrapper> {
-
         protected String name;
         protected int weight;
-        protected Float failChance;
+        protected float failChance = 0;
         protected int powerTier;
         protected int oreYield;
         protected List<Integer> dimBlacklist;
@@ -134,7 +135,7 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
         }
 
         public MineralBuilder powerTier(PowerTier powerTier) {
-            this.powerTier = powerTier.hashCode();
+            this.powerTier = powerTier.getId();
             return this;
         }
 
@@ -271,7 +272,7 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
             builder.weight(weight);
             builder.failChance(mineralMix.getFailChance());
             builder.ores(Arrays.asList(mineralMix.getOres()));
-            List<BigDecimal> chances = new ArrayList<>();
+            List<BigDecimal> chances = new ObjectArrayList<>();
             for (float chance : mineralMix.getChances()) chances.add(new BigDecimal(chance));
             builder.chances(chances);
             builder.dimWhitelist(Arrays.stream(mineralMix.getDimensionWhitelist()).boxed().collect(Collectors.toList()));
