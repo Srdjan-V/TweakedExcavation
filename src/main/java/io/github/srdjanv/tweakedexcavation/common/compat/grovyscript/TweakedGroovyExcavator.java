@@ -5,6 +5,8 @@ import com.cleanroommc.groovyscript.api.GroovyBlacklist;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
+import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
@@ -12,11 +14,21 @@ import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMixGetters;
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
 import io.github.srdjanv.tweakedexcavation.util.MineralValidator;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTier;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.registries.IForgeRegistryEntry;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExcavator.GroovyMineralWrapper> {
@@ -100,10 +112,9 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
         protected float failChance = 0;
         protected int powerTier;
         protected int oreYield;
-        protected List<Integer> dimBlacklist;
-        protected List<Integer> dimWhitelist;
-        protected List<String> ores;
-        protected List<BigDecimal> chances;
+        protected IntList dimBlacklist;
+        protected IntList dimWhitelist;
+        protected Object2DoubleMap<String> ores = new Object2DoubleOpenHashMap<>();
 
         public MineralBuilder name(String name) {
             this.name = name;
@@ -115,13 +126,21 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
             return this;
         }
 
-        public MineralBuilder ores(List<String> ores) {
-            this.ores = ores;
+        /**
+         * Ore input syntax: 'namespace:path:meta'. Meta is optional <p>
+         * Examples: <p>
+         * 'minecraft:oreIron' - minecraft's oredict version of iron <p>
+         * 'minecraft:woolYellow' - minecraft's oredict version of yellow wool <p>
+         * 'minecraft:wool:14' - minecraft's wool with metadata 13 (red wool)
+         */
+        public MineralBuilder ore(String ore, BigDecimal chance) {
+            ores.put(ore, chance.doubleValue());
             return this;
         }
 
-        public MineralBuilder chances(List<BigDecimal> chances) {
-            this.chances = chances;
+        public MineralBuilder ores(Map<String, BigDecimal> ores) {
+            for (var entry : ores.entrySet())
+                ore(entry.getKey(), entry.getValue());
             return this;
         }
 
@@ -146,20 +165,24 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
         }
 
         public MineralBuilder dimBlacklist(List<Integer> dimBlacklist) {
-            this.dimBlacklist = dimBlacklist;
+            if (this.dimBlacklist == null) this.dimBlacklist = new IntArrayList(dimBlacklist);
+            this.dimBlacklist.addAll(dimBlacklist);
             return this;
         }
 
         public MineralBuilder dimWhitelist(List<Integer> dimWhitelist) {
-            this.dimWhitelist = dimWhitelist;
+            if (this.dimWhitelist == null) this.dimWhitelist = new IntArrayList(dimWhitelist);
+            this.dimWhitelist.addAll(dimWhitelist);
             return this;
         }
 
         @Override
         public boolean validate() {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding custom Mineral deposit").error();
-            MineralValidator.validateGroovyMineral(msg, name, failChance, ores, chances, weight, powerTier, oreYield,
-                    dimBlacklist, dimWhitelist);
+            MineralValidator.validateGroovyMineral(msg, name, failChance,
+                    ores.keySet(),
+                    ores.values(),
+                    weight, powerTier, oreYield);
 
             return !msg.postIfNotEmpty();
         }
@@ -168,11 +191,11 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
         public GroovyMineralWrapper register() {
             if (!validate()) return null;
 
-            double[] doubleChances = chances.stream().mapToDouble(BigDecimal::doubleValue).toArray();
+            double[] doubleChances = ores.values().toDoubleArray();
             float[] floatChances = new float[doubleChances.length];
             for (int i = 0; i < doubleChances.length; i++) floatChances[i] = (float) doubleChances[i];
 
-            IMineralMix mix = (IMineralMix) new ExcavatorHandler.MineralMix(name, failChance, ores.toArray(new String[0]), floatChances);
+            IMineralMix mix = (IMineralMix) new ExcavatorHandler.MineralMix(name, failChance, ores.keySet().toArray(new String[0]), floatChances);
             mix.setPowerTier(powerTier);
 
             if (oreYield != 0) mix.setYield(oreYield);
@@ -272,10 +295,16 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
             builder.name(mineralMix.getName());
             builder.weight(weight);
             builder.failChance(mineralMix.getFailChance());
-            builder.ores(Arrays.asList(mineralMix.getOres()));
-            List<BigDecimal> chances = new ObjectArrayList<>();
-            for (float chance : mineralMix.getChances()) chances.add(new BigDecimal(chance));
-            builder.chances(chances);
+
+            String[] ores = mineralMix.getOres();
+            float[] chances = mineralMix.getChances();
+            for (int i = 0, oresLength = ores.length; i < oresLength; i++) {
+                String ore = ores[i];
+                double chance = 0;
+                if (chances.length > i) chance = chances[i];
+                builder.ore(ore, BigDecimal.valueOf(chance));
+            }
+
             builder.dimWhitelist(Arrays.stream(mineralMix.getDimensionWhitelist()).boxed().collect(Collectors.toList()));
             builder.dimBlacklist(Arrays.stream(mineralMix.getDimensionBlacklist()).boxed().collect(Collectors.toList()));
             builder.oreYield(mineralMix.getYield());

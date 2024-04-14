@@ -30,7 +30,7 @@ public class TweakedExcavator {
 
     private static void commonMineral(String name, int mineralWeight, float failChance, String[] ores, float[] chances, int powerTier, int oreYield,
                                       int[] dimBlacklist, int[] dimWhitelist) {
-        MineralValidator.validateCTMineral(name, failChance, ores, chances, mineralWeight, powerTier, oreYield, dimBlacklist, dimWhitelist);
+        MineralValidator.validateCTMineral(name, failChance, ores, chances, mineralWeight, powerTier, oreYield);
         ExcavatorHandler.MineralMix mineral = TweakedExcavatorHandler.addTweakedMineral(name, mineralWeight, failChance, ores, chances, powerTier);
 
         if (dimWhitelist != null && dimWhitelist.length > 0) mineral.dimensionWhitelist = dimWhitelist;

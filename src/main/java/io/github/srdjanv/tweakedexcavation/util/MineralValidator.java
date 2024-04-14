@@ -3,40 +3,44 @@ package io.github.srdjanv.tweakedexcavation.util;
 import com.cleanroommc.groovyscript.api.GroovyLog;
 import crafttweaker.CraftTweakerAPI;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTierHandler;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleCollection;
+import it.unimi.dsi.fastutil.ints.IntList;
 import org.apache.logging.log4j.message.ParameterizedMessage;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class MineralValidator {
-    public static boolean validateGroovyMineral(GroovyLog.Msg msg, String name, float failChance, List<String> ores, List<BigDecimal> chances, int weight, int powerTier, int oreYield,
-                                                List<Integer> dimBlacklist, List<Integer> dimWhitelist) {
+    public static boolean validateGroovyMineral(GroovyLog.Msg msg, String name, float failChance,
+                                                Collection<String> ores, DoubleCollection chances,
+                                                int weight, int powerTier, int oreYield) {
         var builder = new MessageBuilder(msg::add);
-        return validateCommon(builder, name, failChance, ores, chances, weight, powerTier, oreYield, dimBlacklist, dimWhitelist);
+        return validateCommon(builder, name, failChance, ores, chances, weight, powerTier, oreYield);
     }
 
-    public static boolean validateCTMineral(String name, float failChance, String[] ores, float[] chances, int weight, int powerTier, int oreYield,
-                                            int[] dimBlacklist, int[] dimWhitelist) {
+    public static boolean validateCTMineral(String name, float failChance,
+                                            String[] ores, float[] chances,
+                                            int weight, int powerTier, int oreYield) {
         var builder = new MessageBuilder(CraftTweakerAPI::logError);
         var dChances = IntStream.range(0, chances.length)
                 .mapToDouble(i -> chances[i])
-                .mapToObj(BigDecimal::valueOf)
-                .collect(Collectors.toList());
+                .toArray();
 
         return validateCommon(builder, name, failChance,
                 Arrays.stream(ores).collect(Collectors.toList()),
-                dChances,
-                weight, powerTier, oreYield,
-                Arrays.stream(dimBlacklist).boxed().collect(Collectors.toList()),
-                Arrays.stream(dimWhitelist).boxed().collect(Collectors.toList()));
+                new DoubleArrayList(dChances),
+                weight, powerTier, oreYield);
     }
 
-    public static boolean validateCommon(MessageBuilder builder, String name, float failChance, List<String> ores, List<BigDecimal> chances, int weight, int powerTier, int oreYield,
-                                         List<Integer> dimBlacklist, List<Integer> dimWhitelist) {
+    public static boolean validateCommon(MessageBuilder builder, String name, float failChance,
+                                         Collection<String> ores, DoubleCollection chances,
+                                         int weight, int powerTier, int oreYield) {
         validateName(builder, name);
         if (!builder.isValid()) name = "INVALID_NAME";
         validateFailChance(builder, name, failChance);
@@ -48,9 +52,6 @@ public class MineralValidator {
         validateWeight(builder, name, weight);
         validatePowerTier(builder, name, powerTier);
         validateOreYield(builder, name, oreYield);
-
-        validateDimBlacklist(builder, name, dimBlacklist);
-        validateDimWhitelist(builder, name, dimWhitelist);
         return builder.isValid();
     }
 
@@ -68,7 +69,7 @@ public class MineralValidator {
                 "Mineral({}): failChance can not be greater then 1!", name);
     }
 
-    public static void validateOres(MessageBuilder builder, String name, List<String> ores, List<BigDecimal> chances) {
+    public static void validateOres(MessageBuilder builder, String name, Collection<String> ores, DoubleCollection chances) {
         if (ores == null) return;
         ores.forEach(ore -> {
             builder.check(ore == null,
@@ -81,7 +82,7 @@ public class MineralValidator {
                 "Mineral({}): Should not have more then 14 ores, it will not be displayed correctly in jei", name);
     }
 
-    public static void validateChances(MessageBuilder builder, String name, List<BigDecimal> chances) {
+    public static void validateChances(MessageBuilder builder, String name, DoubleCollection chances) {
         if (chances == null) return;
         chances.forEach(chance -> {
             builder.check(chance == null,
@@ -89,7 +90,7 @@ public class MineralValidator {
         });
     }
 
-    public static void validateOresAndChances(MessageBuilder builder, String name, List<String> ores, List<BigDecimal> chances) {
+    public static void validateOresAndChances(MessageBuilder builder, String name, Collection<String> ores, DoubleCollection chances) {
         if (ores == null || chances == null) return;
         validateOresAndChances(builder, name, ores.size(), chances.size());
     }
@@ -115,22 +116,6 @@ public class MineralValidator {
     public static void validateOreYield(MessageBuilder builder, String name, int oreYield) {
         builder.check(oreYield < 0,
                 "Mineral({}): oreYield can not be smaller then 0!", name);
-    }
-
-    public static void validateDimBlacklist(MessageBuilder builder, String name, List<Integer> dimBlacklist) {
-        if (dimBlacklist == null) return;
-        dimBlacklist.forEach(id -> {
-            builder.check(id == null,
-                    "Mineral({}): Dim id: '{}' in dimBlacklist is Null", name, id);
-        });
-    }
-
-    public static void validateDimWhitelist(MessageBuilder builder, String name, List<Integer> dimWhitelist) {
-        if (dimWhitelist == null) return;
-        dimWhitelist.forEach(id -> {
-            builder.check(id == null,
-                    "Mineral({}): Dim id: '{}' in dimWhitelist is Null", name, id);
-        });
     }
 
 
