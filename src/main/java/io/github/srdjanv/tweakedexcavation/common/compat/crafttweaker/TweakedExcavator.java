@@ -5,6 +5,9 @@ import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import io.github.srdjanv.tweakedexcavation.api.crafting.TweakedExcavatorHandler;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
+import io.github.srdjanv.tweakedexcavation.util.MineralValidator;
+import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import stanhebben.zenscript.annotations.*;
 
 @SuppressWarnings("unused")
@@ -27,31 +30,29 @@ public class TweakedExcavator {
 
     private static void commonMineral(String name, int mineralWeight, float failChance, String[] ores, float[] chances, int powerTier, int oreYield,
                                       int[] dimBlacklist, int[] dimWhitelist) {
-
-        if (name.isEmpty()) {
-            CraftTweakerAPI.logError("Reservoir name can not be a empty string!");
-        }
-        if (ores.length != chances.length) {
-            CraftTweakerAPI.logError("Mineral(" + name + ") is missing ores or chances in the Arrays");
-        }
-        if (ores.length > 14) {
-            CraftTweakerAPI.logError("Mineral(" + name + ") Should not have more then 14 ores");
-        }
-
+        MineralValidator.validateCTMineral(name, failChance, ores, chances, mineralWeight, powerTier, oreYield, dimBlacklist, dimWhitelist);
         ExcavatorHandler.MineralMix mineral = TweakedExcavatorHandler.addTweakedMineral(name, mineralWeight, failChance, ores, chances, powerTier);
 
-        if (dimWhitelist != null && dimWhitelist.length > 0) {
-            mineral.dimensionWhitelist = dimWhitelist;
-        }
-        if (dimBlacklist != null && dimBlacklist.length > 0) {
-            mineral.dimensionBlacklist = dimBlacklist;
-        }
-        if (oreYield != 0) {
-            ((IMineralMix) mineral).setYield(oreYield);
-        }
+        if (dimWhitelist != null && dimWhitelist.length > 0) mineral.dimensionWhitelist = dimWhitelist;
+        if (dimBlacklist != null && dimBlacklist.length > 0) mineral.dimensionBlacklist = dimBlacklist;
+        if (oreYield != 0) ((IMineralMix) mineral).setYield(oreYield);
 
-        CraftTweakerAPI.logInfo("Adding MineralMix: " + name + " with weight " + mineralWeight);
+        CraftTweakerAPI.logInfo("Adding MineralMix: '" + name + "' with weight " + mineralWeight);
+    }
 
+    @ZenMethod
+    public static boolean removeTweakedMineral(String name) {
+        var minInt = ExcavatorHandler.mineralList.keySet().iterator();
+        boolean modified = false;
+
+        while (minInt.hasNext()) {
+            var min = minInt.next();
+            if (name.equalsIgnoreCase(min.name)) {
+                minInt.remove();
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     @ZenMethod
@@ -94,6 +95,46 @@ public class TweakedExcavator {
             mix.setYield(yield);
         }
 
+        @ZenGetter("failChance")
+        public double getFailChance() {
+            return this.mix.getFailChance();
+        }
+
+        @ZenSetter("failChance")
+        public void setFailChance(double chance) {
+            mix.setFailChance((float) chance);
+        }
+
+        @ZenMethod
+        public void addOre(String ore, double chance) {
+            String[] newOres = new String[mix.getOres().length + 1];
+            float[] newChances = new float[newOres.length];
+            System.arraycopy(mix.getOres(), 0, newOres, 0, mix.getOres().length);
+            System.arraycopy(mix.getChances(), 0, newChances, 0, mix.getChances().length);
+            newOres[mix.getOres().length] = ore;
+            newChances[mix.getOres().length] = (float)chance;
+            this.mix.setOres(newOres);
+            this.mix.setChances(newChances);
+        }
+
+        @ZenMethod
+        public void removeOre(String ore) {
+            Object2FloatMap<String> map = new Object2FloatOpenHashMap<>();
+
+            int i;
+            for(i = 0; i < mix.getOres().length; ++i)
+                map.put(mix.getOres()[i], mix.getChances()[i]);
+
+            map.remove(ore);
+            mix.setOres(new String[map.size()]);
+            mix.setChances(new float[map.size()]);
+            i = 0;
+
+            for (var e : map.object2FloatEntrySet()) {
+                mix.getOres()[i] = e.getKey();
+                mix.getChances()[i] = e.getFloatValue();
+            }
+        }
     }
 
 }

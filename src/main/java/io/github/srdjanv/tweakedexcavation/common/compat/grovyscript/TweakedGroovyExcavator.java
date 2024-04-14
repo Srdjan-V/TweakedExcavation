@@ -10,6 +10,7 @@ import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMixGetters;
 import io.github.srdjanv.tweakedexcavation.common.CustomMineralBlocks;
+import io.github.srdjanv.tweakedexcavation.util.MineralValidator;
 import io.github.srdjanv.tweakedlib.api.powertier.PowerTier;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.item.ItemStack;
@@ -157,7 +158,7 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
         @Override
         public boolean validate() {
             GroovyLog.Msg msg = GroovyLog.msg("Error adding custom Mineral deposit").error();
-            GroovyMineralValidator.validateGroovyMineral(msg, name, failChance, ores, chances, weight, powerTier, oreYield,
+            MineralValidator.validateGroovyMineral(msg, name, failChance, ores, chances, weight, powerTier, oreYield,
                     dimBlacklist, dimWhitelist);
 
             return !msg.postIfNotEmpty();
