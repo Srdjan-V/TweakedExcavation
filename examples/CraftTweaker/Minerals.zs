@@ -20,9 +20,6 @@ import mods.TweakedExcavation.TweakedMineral;
     TweakedExcavator.addMineralWithCustomYield(String name, int mineralWeight, float failChance, String[] ores, float[] chances, int powerTier, int oreYield,
                                                  @Optional int[] dimBlacklist, @Optional int[] dimWhitelist)
     oreYield - is the size of the mineral vein
-
-
-    TweakedPowerTier.registerPowerTier(int capacity, int rft)
 */
 
     var powerTier = TweakedPowerTier.registerPowerTier(64000, 4096);
@@ -34,7 +31,7 @@ import mods.TweakedExcavation.TweakedMineral;
 /*
     mods.TweakedExcavation.TweakedMineral is used for modifying default IE minerals and custom ones
 
-    available fields:
+    Additional fields:
     -powerTier
     -yield
 
