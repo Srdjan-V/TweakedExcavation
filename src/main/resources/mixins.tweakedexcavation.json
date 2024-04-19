@@ -1,12 +1,13 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "srki2k.tweakedexcavation.mixin",
+  "package": "io.github.srdjanv.tweakedexcavation.mixin",
   "refmap": "mixins.tweakedexcavation.refmap.json",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinExcavatorHandler",
     "MixinMineralMix",
+    "MixinMineralMixAddons",
     "MixinMineralWorldInfo",
     "MixinTileEntityExcavator"
   ],
