@@ -6,7 +6,6 @@ import com.cleanroommc.groovyscript.api.GroovyLog;
 import com.cleanroommc.groovyscript.helper.Alias;
 import com.cleanroommc.groovyscript.helper.SimpleObjectStream;
 import com.cleanroommc.groovyscript.helper.ingredient.OreDictIngredient;
-import com.cleanroommc.groovyscript.helper.ingredient.OreDictWildcardIngredient;
 import com.cleanroommc.groovyscript.helper.recipe.IRecipeBuilder;
 import com.cleanroommc.groovyscript.registry.VirtualizedRegistry;
 import io.github.srdjanv.tweakedexcavation.api.mixins.IMineralMix;
@@ -18,17 +17,10 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExcavator.GroovyMineralWrapper> {
@@ -142,15 +134,17 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
             return this;
         }
 
+        public MineralBuilder ore(Object ore, BigDecimal chance) {
+            if (ore instanceof String stringOre) {
+                ore(stringOre, chance);
+            } else if (ore instanceof OreDictIngredient dict) {
+                ore(dict, chance);
+            } else throw new IllegalArgumentException("Unknown ore type: " + ore);
+            return this;
+        }
+
         public MineralBuilder ores(Map<Object, BigDecimal> ores) {
-            for (var entry : ores.entrySet()) {
-                var o =entry.getKey();
-                if (o instanceof String string) {
-                    ore(string, entry.getValue());
-                } else if (o instanceof OreDictIngredient ore) {
-                    ore(ore.getOreDict(), entry.getValue());
-                } else throw new IllegalArgumentException("Unknown ore type: " + o);
-            }
+            for (var entry : ores.entrySet()) ore(entry.getKey(), entry.getValue());
             return this;
         }
 
@@ -197,7 +191,7 @@ public class TweakedGroovyExcavator extends VirtualizedRegistry<TweakedGroovyExc
             return !msg.postIfNotEmpty();
         }
 
-        @Override
+        @SuppressWarnings("UnreachableCode") @Override
         public GroovyMineralWrapper register() {
             if (!validate()) return null;
 
